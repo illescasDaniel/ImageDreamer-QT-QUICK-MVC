@@ -1,0 +1,20 @@
+name: ImageDreamer
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=12.1
+  - pyside6
+  - transformers
+  - diffusers
+  - accelerate
+  - invoke
+  - pip
+  - pip:
+      - "xformers --extra-index-url https://download.pytorch.org/whl/cu121"
