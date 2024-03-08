@@ -6,10 +6,10 @@ import QtQuick.Dialogs
 ApplicationWindow {
 	id: window
 	visible: true
-	width: 340
-	height: 512
-	minimumWidth: 340
-	minimumHeight: 512
+	width: 390
+	height: 540
+	minimumWidth: 390
+	minimumHeight: 540
 	title: "Image Dreamer"
 
 	ColumnLayout {
@@ -34,8 +34,8 @@ ApplicationWindow {
 		}
 
 		Image {
-			Layout.preferredWidth: 340
-			Layout.preferredHeight: 340
+			Layout.preferredWidth: 390
+			Layout.preferredHeight: 390
 			Layout.fillWidth: true
 			Layout.fillHeight: true
 			id: outputImageView
