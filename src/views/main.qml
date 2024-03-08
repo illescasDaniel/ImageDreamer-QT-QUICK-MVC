@@ -39,7 +39,7 @@ ApplicationWindow {
 			Layout.preferredHeight: 340
 			Layout.fillWidth: true
 			id: outputImageView
-			source: ''
+			source: ""
 			fillMode: Image.PreserveAspectFit
 			mipmap: true
 		}

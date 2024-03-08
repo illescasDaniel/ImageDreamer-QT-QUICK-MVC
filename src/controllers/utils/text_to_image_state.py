@@ -20,7 +20,7 @@ class TextToImageState(Enum):
 
 	@classmethod
 	def SUCCESS(cls, image_path: Path) -> dict[str, Any]:
-		return cls.__to_dict(cls.__SUCCESS, image_path=str(image_path))
+		return cls.__to_dict(cls.__SUCCESS, image_path=image_path.as_uri())
 
 	@classmethod
 	def ERROR(cls, exception: Exception) -> dict[str, Any]:

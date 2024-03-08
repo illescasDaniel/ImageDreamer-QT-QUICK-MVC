@@ -1,3 +1,4 @@
+import platform
 import sys
 import logging
 from pathlib import Path
@@ -13,7 +14,10 @@ if __name__ == "__main__":
 
 	app = QGuiApplication(sys.argv)
 
-	QQuickStyle.setStyle("Default")
+	if platform.system() == 'Windows':
+		QQuickStyle.setStyle("Universal")
+	else:
+		QQuickStyle.setStyle("Default")
 
 	engine = QQmlApplicationEngine()
 

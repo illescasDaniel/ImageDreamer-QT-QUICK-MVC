@@ -2,6 +2,7 @@ from typing import Optional
 from invoke.tasks import task
 from invoke.context import Context
 import os
+import subprocess
 
 
 # @task(help={
@@ -59,7 +60,7 @@ def run(ctx: Context):
 	'''
 	Run the main.py app. Make sure you have the necessary dependencies installed.
 	'''
-	ctx.run('python3 src/main.py')
+	ctx.run(f'{get_python_command()} src/main.py')
 
 # @task(help={
 # 	'show_prints': 'Force pytest to show prints even if the test passes.',
@@ -103,3 +104,13 @@ def run(ctx: Context):
 # 	os.environ['PYTHONPATH'] = f'{os.environ.get("PYTHONPATH")}:{project_root}:{source_code_root}'
 
 # 	ctx.run('pytest --color=yes --cov=src/ --cov-report xml tests/')
+
+def get_python_command():
+	"""Determine the Python command based on the availability of 'python3' or 'python'."""
+	try:
+		# Try to run `python3 --version`
+		subprocess.run(["python3", "--version"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+		return "python3"
+	except (subprocess.CalledProcessError, FileNotFoundError):
+		# Fallback to `python` if `python3` is not available
+		return "python"
