@@ -17,4 +17,4 @@ dependencies:
   - pip
   - pip:
     - pyside6
-    - "xformers --extra-index-url https://download.pytorch.org/whl/cu121"
+    - "xformers==0.0.24 --extra-index-url https://download.pytorch.org/whl/cu121"
