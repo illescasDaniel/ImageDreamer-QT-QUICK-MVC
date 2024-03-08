@@ -18,7 +18,6 @@ ApplicationWindow {
 
 		ScrollView {
 			Layout.fillWidth: true
-			Layout.fillHeight: true
 			Layout.preferredHeight: 100
 			TextArea {
 				id: inputText
@@ -38,9 +37,11 @@ ApplicationWindow {
 			Layout.preferredWidth: 340
 			Layout.preferredHeight: 340
 			Layout.fillWidth: true
+			Layout.fillHeight: true
 			id: outputImageView
 			source: ""
 			fillMode: Image.PreserveAspectFit
+			verticalAlignment: Image.AlignBottom
 			mipmap: true
 		}
 	}
