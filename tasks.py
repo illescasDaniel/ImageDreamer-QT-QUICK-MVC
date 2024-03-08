@@ -105,7 +105,7 @@ def run(ctx: Context):
 
 # 	ctx.run('pytest --color=yes --cov=src/ --cov-report xml tests/')
 
-def get_python_command():
+def get_python_command() -> str:
 	"""Determine the Python command based on the availability of 'python3' or 'python'."""
 	try:
 		# Try to run `python3 --version`
