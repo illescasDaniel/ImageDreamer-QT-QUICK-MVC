@@ -64,11 +64,11 @@ def run(ctx: Context):
 ###### Building the executable ######
 
 @task(help={
-	'show_terminal': 'Hide terminal window (buggy right now, False by default)',
+	'show_terminal': 'Show terminal window (buggy right now, True by default)',
 })
 def build(ctx: Context, show_terminal: bool = True):
 	'''
-	Build the application using PyInstaller, please remove build, dist and main.spec files if got any error.
+	Build the application using PyInstaller, please remove build, dist and ImageDreamer.spec files if got any error.
 	After running the command successfully, run the executable with `invoke run-executable`.
 
 	Args:
@@ -79,65 +79,65 @@ def build(ctx: Context, show_terminal: bool = True):
 		shutil.rmtree('build', onerror=lambda _, __, ___: None)
 		shutil.rmtree('dist', onerror=lambda _, __, ___: None)
 		try:
-			os.remove('main.spec')
+			os.remove('ImageDreamer.spec')
 		except FileNotFoundError:
 			pass
 		# run pyinstaller command, we need to copy the xformers folder contents too
 		xformers_path = Path(xformers.__file__).parent
 		windowed_or_not = '' if show_terminal else '--windowed '
-		command = f'pyinstaller -y {windowed_or_not}--hidden-import=pathlib --icon=resources/app_icon.ico --add-data "src/views:views" --add-data "{xformers_path}:xformers" --add-data "src/assets:assets" src/main.py'
+		command = f'pyinstaller --name ImageDreamer -y {windowed_or_not}--hidden-import=pathlib --icon=resources/app_icon.ico --add-data "src/views:views" --add-data "{xformers_path}:xformers" --add-data "src/assets:assets" src/main.py'
 		ctx.run(command)
 		# create an output folder for images generation
-		os.makedirs('dist/main/output', exist_ok=True)
+		os.makedirs('dist/ImageDreamer/output', exist_ok=True)
 		# copy model
-		model_destination_dir = 'dist/main/resources/models/'
+		model_destination_dir = 'dist/ImageDreamer/resources/models/'
 		os.makedirs(model_destination_dir, exist_ok=True)
 		model_source_dir = next(Path('resources/models').glob('*.safetensors'), None)
 		shutil.copy(src=str(model_source_dir), dst=model_destination_dir)
 		# create an empty placeholder file inside the models folder
-		file_path = 'dist/main/resources/models/place-your-safetensors-model-here'
+		file_path = 'dist/ImageDreamer/resources/models/place-your-safetensors-model-here'
 		with open(file_path, 'w'):
 			pass
 	except Exception as e:
 		print(f'An error occurred while building the executable: {e}')
 		print('Make sure you have "pyinstaller" installed by running "conda install pyinstaller" or "pip install pyinstaller"')
-		print('If you have recursion limits, simply add "import sys ; sys.setrecursionlimit(sys.getrecursionlimit() * 5)" at the beggining of the "main.spec" file, then run "pyinstaller main.spec"')
+		print('If you have recursion limits, simply add "import sys ; sys.setrecursionlimit(sys.getrecursionlimit() * 5)" at the beggining of the "ImageDreamer.spec" file, then run "pyinstaller ImageDreamer.spec"')
 
 @task
 def create_tar_ball(ctx: Context):
 	'''
 	Compress program and its folders.
 	'''
-	output_file_path = 'dist/main/image_dreamer_no_model.tar.gz'
+	output_file_path = 'dist/ImageDreamer/image_dreamer_no_model.tar.gz'
 	cleanup_compressed_files()
-	safetensors_file_path = str(get_safetensors_path_or_exception('dist/main/resources/models'))
-	ctx.run(f'tar -czvf "{output_file_path}" --exclude="{safetensors_file_path}" dist/main/')
+	safetensors_file_path = str(get_safetensors_path_or_exception('dist/ImageDreamer/resources/models'))
+	ctx.run(f'tar -czvf "{output_file_path}" --exclude="{safetensors_file_path}" dist/ImageDreamer/')
 
 @task
 def create_7zip(ctx: Context):
 	'''
 	Compress program and its folders. You need p7zip-full.
 	'''
-	output_file_path = 'dist/main/image_dreamer_no_model.7z'
+	output_file_path = 'dist/ImageDreamer/image_dreamer_no_model.7z'
 	cleanup_compressed_files()
-	safetensors_file_path = str(get_safetensors_path_or_exception('dist/main/resources/models'))
-	ctx.run(f'7z a -t7z -m0=lzma2 -mx=9 -ms=on -x!{safetensors_file_path} {output_file_path} dist/main/')
+	safetensors_file_path = str(get_safetensors_path_or_exception('dist/ImageDreamer/resources/models'))
+	ctx.run(f'7z a -t7z -m0=lzma2 -mx=9 -ms=on -x!{safetensors_file_path} {output_file_path} dist/ImageDreamer/')
 
 @task(help={
 	'log_level': 'Optional: specify the log level.',
 })
 def run_executable(ctx: Context, log_level: Optional[str] = None):
 	'''
-	Run the executable, located at './dist/main/main'.
+	Run the executable, located at './dist/ImageDreamer/ImageDreamer'.
 
 	Args:
 		log_level (Optional[str]): The log level, like DEBUG or WARNING.
 	'''
 	execute_command: str
 	if platform.system() == 'Windows':
-		execute_command = str(Path('./dist/main/main.exe'))
+		execute_command = str(Path('./dist/ImageDreamer/ImageDreamer.exe'))
 	else:
-		execute_command = str(Path('./dist/main/main'))
+		execute_command = str(Path('./dist/ImageDreamer/ImageDreamer'))
 
 	if log_level is not None:
 		execute_command += f'--log {log_level}'

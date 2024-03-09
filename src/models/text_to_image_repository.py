@@ -1,14 +1,16 @@
 from pathlib import Path
 import time
 from typing import Callable, Optional
+import uuid
+import re
+import unicodedata
+
 from diffusers.pipelines.stable_diffusion_xl.pipeline_stable_diffusion_xl import StableDiffusionXLPipeline
 from diffusers.pipelines.stable_diffusion_xl.pipeline_output import StableDiffusionXLPipelineOutput
 from diffusers.schedulers.scheduling_euler_ancestral_discrete import EulerAncestralDiscreteScheduler
 import torch
 import PIL.Image
-import uuid
-import re
-import unicodedata
+
 from models.utils.app_utils import AppUtils
 from models.utils.torch_utils import TorchUtils
 
@@ -30,6 +32,9 @@ class TextToImageRepository:
 			pretrained_model_link_or_path=str(model_path),
 			torch_dtype=torch.float16
 		).to(TorchUtils.get_device()) # type: ignore
+		# disable cli progress bar on distributed executables
+		if AppUtils.is_app_frozen():
+			pipeline.set_progress_bar_config(disable=True)
 		# enable optimizations
 		pipeline.enable_xformers_memory_efficient_attention()
 		pipeline.enable_sequential_cpu_offload()

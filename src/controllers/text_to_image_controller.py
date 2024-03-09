@@ -1,6 +1,8 @@
 import logging
 from threading import Thread
+
 from PySide6.QtCore import QObject, Signal, Slot
+
 from controllers.utils.text_to_image_state import TextToImageState
 from models.text_to_image_repository import TextToImageRepository
 
