@@ -17,19 +17,20 @@ class TextToImageRepository:
 	__TOTAL_STEPS: int = 8
 
 	def initialize(self):
-		# free vram
+		# free-up resources
 		self.cleanup()
-		# pipeline
+		# get model_path
 		model_path = AppUtils.app_base_path().parent / 'resources' / 'models' / 'dreamshaperXL_sfwV2TurboDPMSDE.safetensors'
+		# get pipeline
 		pipeline: StableDiffusionXLPipeline = StableDiffusionXLPipeline.from_single_file(
 			pretrained_model_link_or_path=str(model_path),
 			torch_dtype=torch.float16
 		).to(TorchUtils.get_device()) # type: ignore
-		# optimizations
+		# enable optimizations
 		pipeline.enable_xformers_memory_efficient_attention()
 		pipeline.enable_sequential_cpu_offload()
 		pipeline.enable_vae_slicing()
-		# sampler
+		# assign Euler sampler
 		pipeline.scheduler = EulerAncestralDiscreteScheduler.from_config(pipeline.scheduler.config)
 		# seed generator
 		self.__generator = torch.Generator()

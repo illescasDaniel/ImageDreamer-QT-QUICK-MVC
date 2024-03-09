@@ -1,47 +1,58 @@
 from typing import Optional
 from invoke.tasks import task
 from invoke.context import Context
-import os
 import subprocess
+from pathlib import Path
+import xformers
+import shutil
+import os
 
 
-# @task(help={
-# 	'snapshot_id': 'Your hugging face model id, found at $HOME/.cache/huggingface/hub/models--facebook--bart-large-cnn/snapshots/<snapshot id here>'
-# })
-# def build(ctx: Context, snapshot_id: str):
-# 	'''
-# 	Build the application using PyInstaller.
-# 	After running the command successfully, run the executable with `invoke run-executable`.
+@task
+def build(ctx: Context):
+	'''
+	Build the application using PyInstaller, please remove build, dist and main.spec files if got any error.
+	After running the command successfully, run the executable with `invoke run-executable`.
 
-# 	Args:
-# 		ctx (Context): The invoke context.
-# 		snapshot_id (str): The ID of the hugging face model snapshot.
+	Args:
+		ctx (Context): The invoke context.
+	'''
+	try:
+		# files cleanup
+		shutil.rmtree('build', onerror=lambda _, __, ___: None)
+		shutil.rmtree('dist', onerror=lambda _, __, ___: None)
+		try:
+			os.remove('main.spec')
+		except FileNotFoundError:
+			pass
+		# run pyinstaller command, we need to copy the xformers folder contents too
+		xformers_path = Path(xformers.__file__).parent
+		command = f'pyinstaller -y --hidden-import=pathlib --add-data "src/views:views" --add-data "{xformers_path}:xformers" src/main.py'
+		ctx.run(command)
+		# create an output folder for images generation
+		os.makedirs('dist/main/output', exist_ok=True)
+		# move model
+		model_destination_dir = 'dist/main/resources/models/'
+		os.makedirs(model_destination_dir, exist_ok=True)
+		shutil.copy(src='resources/models/dreamshaperXL_sfwV2TurboDPMSDE.safetensors', dst=model_destination_dir)
+	except Exception as e:
+		print(f'An error occurred while building the executable: {e}')
+		print('Make sure you have "pyinstaller" installed by running "conda install pyinstaller" or "pip install pyinstaller"')
+		print('If you have recursion limits, simply add "import sys ; sys.setrecursionlimit(sys.getrecursionlimit() * 5)" at the beggining of the "main.spec" file, then run "pyinstaller main.spec"')
 
-# 	Example:
-# 		`invoke build --snapshot-id=37f520fa929c961707657b28798b30c003dd100b`
-# 	'''
-# 	try:
-# 		home_path = os.environ.get('HOME')
-# 		command = f'pyinstaller -y --add-data "src/views:views" --add-data "{home_path}/.cache/huggingface/hub/models--facebook--bart-large-cnn/snapshots/{snapshot_id}:model_directory" src/main.py'
-# 		ctx.run(command)
-# 	except Exception as e:
-# 		print(f'An error occurred while building the executable: {e}')
-# 		print('Make sure you have "pyinstaller" installed by running "conda install pyinstaller" or "pip install pyinstaller"')
-# 		print('If you have recursion limits, simply add "import sys ; sys.setrecursionlimit(sys.getrecursionlimit() * 5)" at the beggining of the "main.spec" file, then run "pyinstaller main.spec"')
+@task
+def run_executable(ctx: Context):
+	'''
+	Run the executable, located at './dist/main/main'.
+	'''
+	ctx.run('./dist/main/main')
 
-# @task
-# def run_executable(ctx: Context):
-# 	'''
-# 	Run the executable, located at './dist/main/main'.
-# 	'''
-# 	ctx.run('./dist/main/main')
-
-# @task
-# def run_executable_debug_logging(ctx: Context):
-# 	'''
-# 	Run the executable, located at './dist/main/main', with DEBUG logging.
-# 	'''
-# 	ctx.run('./dist/main/main --log DEBUG')
+@task
+def run_executable_debug_logging(ctx: Context):
+	'''
+	Run the executable, located at './dist/main/main', with DEBUG logging.
+	'''
+	ctx.run('./dist/main/main --log DEBUG')
 
 @task
 def generate_requirements(ctx: Context):
