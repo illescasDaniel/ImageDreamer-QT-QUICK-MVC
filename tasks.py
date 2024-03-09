@@ -36,10 +36,43 @@ def build(ctx: Context):
 		os.makedirs(model_destination_dir, exist_ok=True)
 		model_source_dir = next(Path('resources/models').glob('*.safetensors'), None)
 		shutil.copy(src=str(model_source_dir), dst=model_destination_dir)
+		# create an empty placeholder file inside the models folder
+		file_path = 'dist/main/resources/models/place-your-safetensors-model-here'
+		with open(file_path, 'w'):
+			pass
 	except Exception as e:
 		print(f'An error occurred while building the executable: {e}')
 		print('Make sure you have "pyinstaller" installed by running "conda install pyinstaller" or "pip install pyinstaller"')
 		print('If you have recursion limits, simply add "import sys ; sys.setrecursionlimit(sys.getrecursionlimit() * 5)" at the beggining of the "main.spec" file, then run "pyinstaller main.spec"')
+
+@task
+def create_tar_ball(ctx: Context):
+	output_file_path = 'dist/main/image_dreamer_no_model.tar.gz'
+	try:
+		os.remove(output_file_path)
+	except FileNotFoundError:
+		pass
+	safetensors_file = next(Path('dist/main/resources/models').glob('*.safetensors'), None)
+	if safetensors_file is None:
+		print('File does not exist')
+		exit(1)
+	safetensors_file_path = str(safetensors_file)
+	ctx.run(f'tar -czvf "{output_file_path}" --exclude="{safetensors_file_path}" dist/main/')
+
+@task
+def create_7zip(ctx: Context):
+	# you need p7zip-full
+	output_file_path = 'dist/main/image_dreamer_no_model.7z'
+	try:
+		os.remove(output_file_path)
+	except FileNotFoundError:
+		pass
+	safetensors_file = next(Path('dist/main/resources/models').glob('*.safetensors'), None)
+	if safetensors_file is None:
+		print('File does not exist')
+		exit(1)
+	safetensors_file_path = str(safetensors_file)
+	ctx.run(f'7z a -t7z -m0=lzma2 -mx=9 -ms=on -x!{safetensors_file_path} {output_file_path} dist/main/')
 
 @task(help={
 	'log_level': 'Optional: specify the log level.',
