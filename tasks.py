@@ -31,28 +31,30 @@ def build(ctx: Context):
 		ctx.run(command)
 		# create an output folder for images generation
 		os.makedirs('dist/main/output', exist_ok=True)
-		# move model
+		# copy model
 		model_destination_dir = 'dist/main/resources/models/'
 		os.makedirs(model_destination_dir, exist_ok=True)
-		shutil.copy(src='resources/models/dreamshaperXL_sfwV2TurboDPMSDE.safetensors', dst=model_destination_dir)
+		model_source_dir = next(Path('resources/models').glob('*.safetensors'), None)
+		shutil.copy(src=str(model_source_dir), dst=model_destination_dir)
 	except Exception as e:
 		print(f'An error occurred while building the executable: {e}')
 		print('Make sure you have "pyinstaller" installed by running "conda install pyinstaller" or "pip install pyinstaller"')
 		print('If you have recursion limits, simply add "import sys ; sys.setrecursionlimit(sys.getrecursionlimit() * 5)" at the beggining of the "main.spec" file, then run "pyinstaller main.spec"')
 
-@task
-def run_executable(ctx: Context):
+@task(help={
+	'log_level': 'Optional: specify the log level.',
+})
+def run_executable(ctx: Context, log_level: Optional[str] = None):
 	'''
 	Run the executable, located at './dist/main/main'.
-	'''
-	ctx.run('./dist/main/main')
 
-@task
-def run_executable_debug_logging(ctx: Context):
+	Args:
+		log_level (Optional[str]): The log level, like DEBUG or WARNING.
 	'''
-	Run the executable, located at './dist/main/main', with DEBUG logging.
-	'''
-	ctx.run('./dist/main/main --log DEBUG')
+	if log_level is not None:
+		ctx.run(f'./dist/main/main --log {log_level}')
+	else:
+		ctx.run('./dist/main/main')
 
 @task
 def generate_requirements(ctx: Context):

@@ -1,13 +1,12 @@
 # ImageDreamer-QT-QUICK-MVC
-Simple app to generate images from text. Currently, it is using "DreamShaperXL v2 model" as the SDXL Turbo model.
+Simple app to generate images from text. Currently, it is meant to use an SDXL Turbo model like DreamShaperXL.
 
 <p align="center">
 	<img src="assets/program_gnome.png" alt="linux GNOME program screenshot" width="300" />
 </p>
 
-
 ## Requirements
-- DreamShaperXL v2 model
+- SDXL Turbo model like "DreamShaperXL v2 model"
 	- SFW v2 Turbo DPM++ SDE: https://civitai.com/models/112902?modelVersionId=341981
 - invoke (Optional, but recommended to easily build and run the app)
 - HuggingFace's accelerate, diffusers and transformers
@@ -65,10 +64,9 @@ You can use `invoke --list` for all available tasks, use `invoke --help <command
 	- [ ] Test on macOS
 - [ ] Add unit tests with `pytest`.
 - [ ] Test pyinstaller and add instructions if necessary. **[WIP]**
-	- [ ] Test pyinstaller on linux
+	- [x] Test pyinstaller on linux
 	- [ ] Test pyinstaller on windows
 	- [ ] Test pyinstaller on macOS
-	- [ ] Create a PathUtils class to handle specific paths
 - [ ] Update tasks.py
 - [ ] Maybe refactor main.qml
 

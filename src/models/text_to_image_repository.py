@@ -20,7 +20,8 @@ class TextToImageRepository:
 		# free-up resources
 		self.cleanup()
 		# get model_path
-		model_path = AppUtils.app_base_path().parent / 'resources' / 'models' / 'dreamshaperXL_sfwV2TurboDPMSDE.safetensors'
+		models_folder_path = AppUtils.app_base_path().parent / 'resources' / 'models'
+		model_path = next(models_folder_path.glob('*.safetensors'), None)
 		# get pipeline
 		pipeline: StableDiffusionXLPipeline = StableDiffusionXLPipeline.from_single_file(
 			pretrained_model_link_or_path=str(model_path),
