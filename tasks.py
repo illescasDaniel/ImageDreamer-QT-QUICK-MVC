@@ -63,8 +63,10 @@ def run(ctx: Context):
 
 ###### Building the executable ######
 
-@task
-def build(ctx: Context, hide_terminal: bool = True):
+@task(help={
+	'show_terminal': 'Hide terminal window (buggy right now, False by default)',
+})
+def build(ctx: Context, show_terminal: bool = True):
 	'''
 	Build the application using PyInstaller, please remove build, dist and main.spec files if got any error.
 	After running the command successfully, run the executable with `invoke run-executable`.
@@ -82,7 +84,7 @@ def build(ctx: Context, hide_terminal: bool = True):
 			pass
 		# run pyinstaller command, we need to copy the xformers folder contents too
 		xformers_path = Path(xformers.__file__).parent
-		windowed_or_not = '--windowed ' if hide_terminal else ''
+		windowed_or_not = '' if show_terminal else '--windowed '
 		command = f'pyinstaller -y {windowed_or_not}--hidden-import=pathlib --icon=resources/app_icon.ico --add-data "src/views:views" --add-data "{xformers_path}:xformers" --add-data "src/assets:assets" src/main.py'
 		ctx.run(command)
 		# create an output folder for images generation

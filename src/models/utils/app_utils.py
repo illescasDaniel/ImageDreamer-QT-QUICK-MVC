@@ -34,7 +34,7 @@ class AppUtils:
 			help="Set the logging level (default: %(default)s)"
 		)
 
-		log = parser.parse_args().log if parser.parse_args().log else default_log_level_str
+		log = parser.parse_args().log or default_log_level_str
 
 		logging.basicConfig(level=getattr(logging, log),
 							format='%(asctime)s - %(levelname)s - %(message)s',

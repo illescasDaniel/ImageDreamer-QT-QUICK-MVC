@@ -22,7 +22,14 @@ ApplicationWindow {
 			TextArea {
 				id: inputText
 				wrapMode: TextEdit.Wrap
-				placeholderText: "Enter text to summarize..."
+				placeholderText: "Enter an image description..."
+
+				Keys.onPressed: function (event) {
+					if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
+						event.accepted = true // Prevents the default behavior (new line)
+						textToImageController.generate(inputText.text)
+					}
+				}
 			}
 		}
 

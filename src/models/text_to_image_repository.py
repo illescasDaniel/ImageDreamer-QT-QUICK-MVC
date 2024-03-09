@@ -1,4 +1,5 @@
 from pathlib import Path
+import time
 from typing import Callable, Optional
 from diffusers.pipelines.stable_diffusion_xl.pipeline_stable_diffusion_xl import StableDiffusionXLPipeline
 from diffusers.pipelines.stable_diffusion_xl.pipeline_output import StableDiffusionXLPipelineOutput
@@ -6,6 +7,8 @@ from diffusers.schedulers.scheduling_euler_ancestral_discrete import EulerAncest
 import torch
 import PIL.Image
 import uuid
+import re
+import unicodedata
 from models.utils.app_utils import AppUtils
 from models.utils.torch_utils import TorchUtils
 
@@ -59,8 +62,14 @@ class TextToImageRepository:
 		) # type: ignore
 		# save image
 		image: PIL.Image.Image = output.images[0]
-		image_path = AppUtils.app_base_path().parent / 'output' / f'{uuid.uuid4()}.png'
-		image.save(image_path)
+		image_path: Path
+		try:
+			sanitized_file_name = self.__sanitize_filename(prompt)
+			image_path = AppUtils.app_base_path().parent / 'output' / f'{sanitized_file_name}-{int(time.time())}.png'
+			image.save(image_path)
+		except:
+			image_path = AppUtils.app_base_path().parent / 'output' / f'{uuid.uuid4()}.png'
+			image.save(image_path)
 		# free resources
 		self.cleanup()
 		# return image path
@@ -68,3 +77,7 @@ class TextToImageRepository:
 
 	def cleanup(self):
 		torch.cuda.empty_cache()
+
+	def __sanitize_filename(self, text: str) -> str:
+		return re.sub(r'\s|[^\w\-\.]', '_', unicodedata.normalize('NFD', text).encode('ascii', 'ignore').decode('ascii')).strip(".").lstrip("_.")[:60]
+
