@@ -58,16 +58,16 @@ Use `invoke run` to run the python app.
 You can use `invoke --list` for all available tasks, use `invoke --help <command>` to get help about a specific command.
 
 ### TODOs:
-- [ ] Test on different devices. **[WIP]**
+- [ ] Test app on different devices. **[WIP]**
 	- [x] Test on linux
 	- [x] Test on windows
 	- [ ] Test on macOS
 - [ ] Add unit tests with `pytest`.
-- [ ] Test pyinstaller and add instructions if necessary. **[WIP]**
+	- [ ] Update tasks.py with tests
+- [ ] Test pyinstaller. **[WIP]**
 	- [x] Test pyinstaller on linux
 	- [ ] Test pyinstaller on windows
 	- [ ] Test pyinstaller on macOS
-- [ ] Update tasks.py
 - [ ] Maybe refactor main.qml
 
 ---
