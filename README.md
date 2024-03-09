@@ -2,7 +2,8 @@
 Simple app to generate images from text. Currently, it is meant to use an SDXL Turbo model like DreamShaperXL.
 
 <p align="center">
-	<img src="assets/program_gnome.png" alt="linux GNOME program screenshot" width="300" />
+	<img src="assets/program_windows.png" alt="windows program screenshot" width="300" />
+	<img src="assets/program_gnome.png" alt="linux GNOME program screenshot" width="285" />
 </p>
 
 ## Requirements
@@ -79,8 +80,9 @@ You can use `invoke --list` for all available tasks, use `invoke --help <command
 	- [ ] Update tasks.py with tests
 - [ ] Test pyinstaller. **[WIP]**
 	- [x] Test pyinstaller on linux
-	- [ ] Test pyinstaller on windows
+	- [x] Test pyinstaller on windows
 	- [ ] Test pyinstaller on macOS
+	- [ ] Add `Instructions.txt` file in `dist/ImageDreamer`
 - [ ] Maybe refactor main.qml
 
 ---

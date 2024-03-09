@@ -8,7 +8,6 @@ from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
 import torch
 
-from controllers.text_to_image_controller import TextToImageController
 from models.utils.app_utils import AppUtils
 
 if __name__ == "__main__":
@@ -23,7 +22,6 @@ if __name__ == "__main__":
 		AppUtils.set_up_logging(logging.DEBUG)
 
 	app = QGuiApplication(sys.argv)
-
 	app_icon_path = str(AppUtils.app_base_path() / 'assets' / 'app_icon.png')
 	app.setWindowIcon(QIcon(app_icon_path))
 
@@ -34,11 +32,11 @@ if __name__ == "__main__":
 
 	engine = QQmlApplicationEngine()
 
+	from controllers.text_to_image_controller import TextToImageController
 	textToImageController = TextToImageController()
 
 	context = engine.rootContext()
 	context.setContextProperty("textToImageController", textToImageController)
-
 
 	qml_file_path = AppUtils.app_base_path() / 'views' / 'main.qml'
 	engine.load(qml_file_path)
