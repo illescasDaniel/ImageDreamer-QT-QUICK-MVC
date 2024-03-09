@@ -41,6 +41,9 @@ https://docs.anaconda.com/free/miniconda/
 **NOTE:** The first time you run it, after you press the "Generate" button it will download the model, please be patient, you can see the progress in the terminal where you run the command.
 
 ## Easy installation using pip
+- **Notes**:
+	- I couldn't get this method to work on my Windows machine. 
+	- Maybe you need to append "--find-links https://download.pytorch.org/whl/cu121" to the xformers dependency in the requirements.txt.
 1. Clone the repo. `git clone https://github.com/illescasDaniel/ImageDreamer-QT-QUICK-MVC.git`
 `cd ImageDreamer-QT-QUICK-MVC`
 2. Download [DreamShaperXL SFW v2 Turbo DPM++ SDE](https://civitai.com/models/112902?modelVersionId=341981) and move it inside the project here: "resources/models/dreamshaperXL_sfwV2TurboDPMSDE.safetensors".

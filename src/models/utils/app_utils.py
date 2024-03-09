@@ -25,17 +25,18 @@ class AppUtils:
 
 	@staticmethod
 	def set_up_logging(logging_level: int):
+		default_log_level_str = AppUtils.__logging_to_string(logging_level)
 		parser = argparse.ArgumentParser(description="Run the application with specified logging level.")
 		parser.add_argument(
 			"--log",
-			default=AppUtils.__logging_to_string(logging_level),
+			default=default_log_level_str,
 			choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
 			help="Set the logging level (default: %(default)s)"
 		)
 
-		args = parser.parse_args()
+		log = parser.parse_args().log if parser.parse_args().log else default_log_level_str
 
-		logging.basicConfig(level=getattr(logging, args.log),
+		logging.basicConfig(level=getattr(logging, log),
 							format='%(asctime)s - %(levelname)s - %(message)s',
 							datefmt='%Y-%m-%d %H:%M:%S')
 

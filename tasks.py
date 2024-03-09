@@ -1,3 +1,4 @@
+import platform
 from typing import Optional
 from invoke.tasks import task
 from invoke.context import Context
@@ -63,7 +64,7 @@ def run(ctx: Context):
 ###### Building the executable ######
 
 @task
-def build(ctx: Context):
+def build(ctx: Context, hide_terminal: bool = True):
 	'''
 	Build the application using PyInstaller, please remove build, dist and main.spec files if got any error.
 	After running the command successfully, run the executable with `invoke run-executable`.
@@ -81,7 +82,8 @@ def build(ctx: Context):
 			pass
 		# run pyinstaller command, we need to copy the xformers folder contents too
 		xformers_path = Path(xformers.__file__).parent
-		command = f'pyinstaller -y --hidden-import=pathlib --add-data "src/views:views" --add-data "{xformers_path}:xformers" src/main.py'
+		windowed_or_not = '--windowed ' if hide_terminal else ''
+		command = f'pyinstaller -y {windowed_or_not}--hidden-import=pathlib --icon=resources/app_icon.ico --add-data "src/views:views" --add-data "{xformers_path}:xformers" --add-data "src/assets:assets" src/main.py'
 		ctx.run(command)
 		# create an output folder for images generation
 		os.makedirs('dist/main/output', exist_ok=True)
@@ -129,10 +131,16 @@ def run_executable(ctx: Context, log_level: Optional[str] = None):
 	Args:
 		log_level (Optional[str]): The log level, like DEBUG or WARNING.
 	'''
-	if log_level is not None:
-		ctx.run(f'./dist/main/main --log {log_level}')
+	execute_command: str
+	if platform.system() == 'Windows':
+		execute_command = str(Path('./dist/main/main.exe'))
 	else:
-		ctx.run('./dist/main/main')
+		execute_command = str(Path('./dist/main/main'))
+
+	if log_level is not None:
+		execute_command += f'--log {log_level}'
+
+	ctx.run(execute_command)
 
 # Other
 
