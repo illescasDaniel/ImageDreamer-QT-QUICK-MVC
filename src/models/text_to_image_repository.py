@@ -26,6 +26,7 @@ class TextToImageRepository:
 	__unsafe_image_detector: Optional[ImageClassificationPipeline] = None
 	__UNSAFE_IMAGE_DETECTOR_ENABLED: bool = True
 	__TOTAL_STEPS: int = 8
+	__PROMPT_MAX_TOKENS: int = 75
 
 	def initialize(self):
 		# free-up resources
@@ -64,6 +65,9 @@ class TextToImageRepository:
 		# check attributes
 		if self.__sd_pipeline is None or self.__generator is None or self.__device is None:
 			raise AttributeError('Pipeline or device not initialized')
+		# check prompt size
+		if len(prompt.split(' ')) > TextToImageRepository.__PROMPT_MAX_TOKENS:
+			raise ValueError("Prompt too long: exceeds 75 words.")
 		# set seed
 		seed = self.manual_seed or torch.seed()
 		self.__generator.manual_seed(seed)
