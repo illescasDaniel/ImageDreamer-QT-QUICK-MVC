@@ -40,6 +40,26 @@ ApplicationWindow {
 			onClicked: textToImageController.generate(inputText.text)
 		}
 
+		Rectangle {
+			color: "#DDDDDD"
+			Layout.preferredWidth: 390
+			Layout.preferredHeight: 390
+			Layout.fillWidth: true
+			Layout.fillHeight: true
+			id: placeholderImageRectangle
+			Image {
+				anchors.centerIn: parent
+				width: 128
+				height: 128
+				source: "../assets/image_placeholder.svg"
+				fillMode: Image.Pad
+				sourceSize.width: 128
+				sourceSize.height: 128
+				visible: true
+				smooth: true
+			}
+		}
+
 		Image {
 			Layout.preferredWidth: 390
 			Layout.preferredHeight: 390
@@ -49,7 +69,8 @@ ApplicationWindow {
 			source: ""
 			fillMode: Image.PreserveAspectFit
 			verticalAlignment: Image.AlignBottom
-			mipmap: true
+			smooth: true
+			visible: false
 		}
 	}
 
@@ -89,6 +110,8 @@ ApplicationWindow {
 				popupLoader.item.progressValue = 0
 				popupLoader.item.progressIsIndeterminate = true
 				outputImageView.source = ""
+				outputImageView.visible = false
+				placeholderImageRectangle.visible = true
 				errorMessageDialog.detailedText = ""
 				break
 			case textToImageState.generatingImage:
@@ -99,6 +122,8 @@ ApplicationWindow {
 				popupLoader.item.visible = false
 				generateImageButton.enabled = true
 				outputImageView.source = state.imagePath
+				placeholderImageRectangle.visible = false
+				outputImageView.visible = true
 				break
 			case textToImageState.error:
 				popupLoader.item.visible = false
