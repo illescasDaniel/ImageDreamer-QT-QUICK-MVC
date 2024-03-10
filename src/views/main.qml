@@ -87,8 +87,8 @@ ApplicationWindow {
 	}
 
 	Loader {
-		id: popupLoader
-		source: "LoadingPopup.qml"
+		id: progressViewPopup
+		source: "ProgressViewPopup.qml"
 		asynchronous: true
 	}
 
@@ -106,27 +106,29 @@ ApplicationWindow {
 			switch (state.value) {
 			case textToImageState.initializing:
 				generateImageButton.enabled = false
-				popupLoader.item.visible = true
-				popupLoader.item.progressValue = 0
-				popupLoader.item.progressIsIndeterminate = true
+				progressViewPopup.item.visible = true
+				progressViewPopup.item.progressValue = 0
+				progressViewPopup.item.progressIsIndeterminate = true
+				progressViewPopup.item.title = "Loading components"
 				outputImageView.source = ""
 				outputImageView.visible = false
 				placeholderImageRectangle.visible = true
 				errorMessageDialog.detailedText = ""
 				break
 			case textToImageState.generatingImage:
-				popupLoader.item.progressIsIndeterminate = false
-				popupLoader.item.progressValue = state.progress
+				progressViewPopup.item.title = `Generating image: ${Math.floor(state.progress * 100)}%`
+				progressViewPopup.item.progressIsIndeterminate = false
+				progressViewPopup.item.progressValue = state.progress
 				break
 			case textToImageState.success:
-				popupLoader.item.visible = false
+				progressViewPopup.item.visible = false
 				generateImageButton.enabled = true
 				outputImageView.source = state.imagePath
 				placeholderImageRectangle.visible = false
 				outputImageView.visible = true
 				break
 			case textToImageState.error:
-				popupLoader.item.visible = false
+				progressViewPopup.item.visible = false
 				generateImageButton.enabled = true
 				errorMessageDialog.detailedText = state.error_message_details
 				errorMessageDialog.visible = true
