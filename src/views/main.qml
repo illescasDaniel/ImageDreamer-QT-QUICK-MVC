@@ -18,7 +18,7 @@ ApplicationWindow {
 
 		ScrollView {
 			Layout.fillWidth: true
-			Layout.preferredHeight: 100
+			Layout.preferredHeight: 80
 			TextArea {
 				id: inputText
 				wrapMode: TextEdit.Wrap
@@ -47,16 +47,32 @@ ApplicationWindow {
 			Layout.fillWidth: true
 			Layout.fillHeight: true
 			id: placeholderImageRectangle
-			Image {
+			ColumnLayout {
 				anchors.centerIn: parent
-				width: 128
-				height: 128
-				source: "../assets/image_placeholder.svg"
-				fillMode: Image.Pad
-				sourceSize.width: 128
-				sourceSize.height: 128
-				visible: true
-				smooth: true
+				Image {
+					Layout.fillWidth: true
+					width: 128
+					height: 128
+					source: "../assets/image_placeholder.svg"
+					fillMode: Image.Pad
+					sourceSize.width: 128
+					sourceSize.height: 128
+					visible: true
+					smooth: true
+				}
+				Text {
+					Layout.fillWidth: true
+					text: "Developed by **Daniel Illescas Romero**"
+					font.pointSize: 8
+					textFormat: Text.MarkdownText
+				}
+				Text {
+					Layout.fillWidth: true
+					text: "Code available at [GitHub](https://github.com/illescasDaniel/ImageDreamer-QT-QUICK-MVC)"
+					font.pointSize: 8
+					textFormat: Text.MarkdownText
+					onLinkActivated: (link) => Qt.openUrlExternally(link)
+				}
 			}
 		}
 

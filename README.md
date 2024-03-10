@@ -85,10 +85,11 @@ You can use `invoke --list` for all available tasks, use `invoke --help <command
 
 #### Acknowledgments
 
-<sup>This project uses the **DreamShaperXL v2 model** checkpoint from [Civitai](https://civitai.com/models/112902?modelVersionId=341981). We appreciate the efforts of the creators for making this model available, enhancing our application's capabilities.</sup>
-- <sup> **Source:** [Civitai - SDXL Turbo Checkpoint](https://civitai.com/models/112902?modelVersionId=341981)</sup>
+<sup>This project uses an SDXL Turbo model from Hugging Face, [Lykon/dreamshaper-xl-v2-turbo](https://huggingface.co/Lykon/dreamshaper-xl-v2-turbo). We appreciate the efforts of the creators for making this model available, enhancing our application's capabilities.</sup>
 - <sup>**Usage:** Integrated to generate images from text descriptions in a Python GUI application, which operates locally on the user's device.</sup>
 - <sup>**License:** [LICENSE-SDXL-Turbo](https://raw.githubusercontent.com/Stability-AI/generative-models/main/model_licenses/LICENSE-SDXL-Turbo)</sup>
+
+<sup>This project also uses an unsafe content image detector model, available at Hugging Face: [Falconsai/nsfw_image_detection](https://huggingface.co/Falconsai/nsfw_image_detection)
 
 <sup>This application is built using the **Qt framework via PySide6**, the official set of Python bindings. The versatility and power of Qt have enabled us to create a robust, cross-platform user interface. Our thanks go to the Qt Company and the open-source contributors for making such a valuable resource available to the developer community.</sup>
 
