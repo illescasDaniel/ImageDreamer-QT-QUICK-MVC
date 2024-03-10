@@ -22,7 +22,7 @@ ApplicationWindow {
 			TextArea {
 				id: inputText
 				wrapMode: TextEdit.Wrap
-				placeholderText: "Enter an image description..."
+				placeholderText: "Describe an image..."
 
 				Keys.onPressed: function (event) {
 					if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
