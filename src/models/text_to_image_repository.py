@@ -26,22 +26,23 @@ class TextToImageRepository:
 		# free-up resources
 		self.cleanup()
 		# get pipeline
+		device = TorchUtils.get_device()
 		pipeline: StableDiffusionXLPipeline = AutoPipelineForText2Image.from_pretrained(
 			pretrained_model_or_path='lykon/dreamshaper-xl-v2-turbo',
 			torch_dtype=torch.float16,
 			variant="fp16",
 			add_watermarker=False
-		).to(TorchUtils.get_device()) # type: ignore
+		).to(device) # type: ignore
 		# disable cli progress bar on distributed executables
 		pipeline.set_progress_bar_config(disable=AppUtils.is_app_frozen())
 		# enable optimizations
 		pipeline.enable_xformers_memory_efficient_attention()
-		pipeline.enable_sequential_cpu_offload()
+		pipeline.enable_sequential_cpu_offload(device=device)
 		pipeline.enable_vae_slicing()
 		# assign Euler sampler
 		pipeline.scheduler = EulerAncestralDiscreteScheduler.from_config(pipeline.scheduler.config)
 		# seed generator
-		self.__generator = torch.Generator()
+		self.__generator = torch.Generator(device=device)
 		# assign pipeline
 		self.__pipeline = pipeline
 
