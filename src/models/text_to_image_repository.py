@@ -8,6 +8,7 @@ import unicodedata
 from diffusers.pipelines.stable_diffusion_xl.pipeline_stable_diffusion_xl import StableDiffusionXLPipeline
 from diffusers.pipelines.stable_diffusion_xl.pipeline_output import StableDiffusionXLPipelineOutput
 from diffusers.schedulers.scheduling_euler_ancestral_discrete import EulerAncestralDiscreteScheduler
+from diffusers.pipelines.auto_pipeline import AutoPipelineForText2Image
 import torch
 import PIL.Image
 
@@ -24,17 +25,15 @@ class TextToImageRepository:
 	def initialize(self):
 		# free-up resources
 		self.cleanup()
-		# get model_path
-		models_folder_path = AppUtils.app_base_path().parent / 'resources' / 'models'
-		model_path = next(models_folder_path.glob('*.safetensors'), None)
 		# get pipeline
-		pipeline: StableDiffusionXLPipeline = StableDiffusionXLPipeline.from_single_file(
-			pretrained_model_link_or_path=str(model_path),
-			torch_dtype=torch.float16
+		pipeline: StableDiffusionXLPipeline = AutoPipelineForText2Image.from_pretrained(
+			pretrained_model_or_path='lykon/dreamshaper-xl-v2-turbo',
+			torch_dtype=torch.float16,
+			variant="fp16",
+			add_watermarker=False
 		).to(TorchUtils.get_device()) # type: ignore
 		# disable cli progress bar on distributed executables
-		if AppUtils.is_app_frozen():
-			pipeline.set_progress_bar_config(disable=True)
+		pipeline.set_progress_bar_config(disable=AppUtils.is_app_frozen())
 		# enable optimizations
 		pipeline.enable_xformers_memory_efficient_attention()
 		pipeline.enable_sequential_cpu_offload()
@@ -51,7 +50,7 @@ class TextToImageRepository:
 		if self.__pipeline is None or self.__generator is None:
 			raise AttributeError('Pipeline not initialized')
 		# set seed
-		seed = self.manual_seed if self.manual_seed is int else torch.seed()
+		seed = self.manual_seed or torch.seed()
 		self.__generator.manual_seed(seed)
 		# generate image
 		def callback_dynamic_cfg(pipe, step_index, timestep, callback_kwargs):
@@ -63,6 +62,9 @@ class TextToImageRepository:
 			num_inference_steps=TextToImageRepository.__TOTAL_STEPS,
 			guidance_scale=2,
 			generator=self.__generator,
+			width=1024,
+			height=1024,
+			original_size=(1024,1024),
 			callback_on_step_end=callback_dynamic_cfg, # type: ignore
 		) # type: ignore
 		# save image
@@ -85,4 +87,3 @@ class TextToImageRepository:
 
 	def __sanitize_filename(self, text: str) -> str:
 		return re.sub(r'\s|[^\w\-\.]', '_', unicodedata.normalize('NFD', text).encode('ascii', 'ignore').decode('ascii')).strip(".").lstrip("_.")[:60]
-

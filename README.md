@@ -7,8 +7,7 @@ Simple app to generate images from text. Currently, it is meant to use an SDXL T
 </p>
 
 ## Requirements
-- SDXL Turbo model like "DreamShaperXL v2 model"
-	- SFW v2 Turbo DPM++ SDE: https://civitai.com/models/112902?modelVersionId=341981
+- SDXL Turbo model like "DreamShaperXL v2 model", it will be automatically downloaded.
 - invoke (Optional, but recommended to easily build and run the app)
 - HuggingFace's accelerate, diffusers and transformers
 - Pytorch
@@ -23,19 +22,18 @@ Simple app to generate images from text. Currently, it is meant to use an SDXL T
 
 **TIP:** use `install-linux-dev.sh` to install these necessary dependencies to work on this project on a conda virtual environment named "ImageDreamer-dev".
 
-## Easy installation using conda (Anaconda/miniconda)
+## Easy installation using conda (Anaconda/miniconda) [Recommended]
 1. Clone the repo. `git clone https://github.com/illescasDaniel/ImageDreamer-QT-QUICK-MVC.git`
-`cd ImageDreamer-QT-QUICK-MVC`
-2. Download [DreamShaperXL SFW v2 Turbo DPM++ SDE](https://civitai.com/models/112902?modelVersionId=341981) and move it inside the project here: "resources/models/dreamshaperXL_sfwV2TurboDPMSDE.safetensors".
-3. Install conda (anaconda or miniconda).
+`cd ImageDreamer-QT-QUICK-MVC`.
+2. Install conda (anaconda or miniconda).
 https://www.anaconda.com/download
 https://docs.anaconda.com/free/miniconda/
-4. Create a conda environment with all its dependencies.
+3. Create a conda environment with all its dependencies.
 	- Ubuntu/macOS: `./install.sh`
 	- Windows (**Anaconda Powershell Prompt**, outside of VSCode): `.\install.ps1`
-5. Activate the new environment: `conda activate ImageDreamer`
-6. Run the app: `invoke run`
-7. Images will be saved to the output folder automatically.
+4. Activate the new environment: `conda activate ImageDreamer`
+5. Run the app: `invoke run`
+6. Images will be saved to the output folder automatically.
 
 **Note:** this is the preferred way, since using pip won't use your system theme.
 
@@ -43,25 +41,23 @@ https://docs.anaconda.com/free/miniconda/
 
 ## Easy installation using pip
 - **Notes**:
-	- I couldn't get this method to work on my Windows machine. 
+	- I couldn't get this method to work on my Windows machine.
 	- Maybe you need to append "--find-links https://download.pytorch.org/whl/cu121" to the xformers dependency in the requirements.txt.
 1. Clone the repo. `git clone https://github.com/illescasDaniel/ImageDreamer-QT-QUICK-MVC.git`
 `cd ImageDreamer-QT-QUICK-MVC`
-2. Download [DreamShaperXL SFW v2 Turbo DPM++ SDE](https://civitai.com/models/112902?modelVersionId=341981) and move it inside the project here: "resources/models/dreamshaperXL_sfwV2TurboDPMSDE.safetensors".
-3. Create a virtual environment: `python3 -m venv imagedreamer-env`
-4. Activate the new environment: `source imagedreamer-env/bin/activate` (`deactivate` to deactivate it)
-5. Install dependencies: `pip3 install -r requirements.txt`
-6. Run the app with `python3 src/main.py` or `invoke run` or `inv run`.
+2. Create a virtual environment: `python3 -m venv imagedreamer-env`
+3. Activate the new environment: `source imagedreamer-env/bin/activate` (`deactivate` to deactivate it)
+4. Install dependencies: `pip3 install -r requirements.txt`
+5. Run the app with `python3 src/main.py` or `invoke run` or `inv run`.
 
 ## Easy and fast installation using uv: https://github.com/astral-sh/uv
 0. `pip install uv` (if not installed already in your system)
 1. Clone the repo. `git clone https://github.com/illescasDaniel/ImageDreamer-QT-QUICK-MVC.git`
 `cd ImageDreamer-QT-QUICK-MVC`
-2. Download [DreamShaperXL SFW v2 Turbo DPM++ SDE](https://civitai.com/models/112902?modelVersionId=341981) and move it inside the project here: "resources/models/dreamshaperXL_sfwV2TurboDPMSDE.safetensors".
-3. Create a virtual environment: `uv venv`
-4. Activate the new environment: `source .venv/bin/activate` (`deactivate` to deactivate it)
-5. Install dependencies: `uv pip install -r requirements.txt`
-6. Run the app with `python3 src/main.py` or `invoke run` or `inv run`.
+2. Create a virtual environment: `uv venv`
+3. Activate the new environment: `source .venv/bin/activate` (`deactivate` to deactivate it)
+4. Install dependencies: `uv pip install -r requirements.txt`
+5. Run the app with `python3 src/main.py` or `invoke run` or `inv run`.
 
 **Note**: <sup>"Having Qt installed in your system will not interfere with your PySide6 installation if you do it via pip install, because the Python packages (wheels) include already Qt binaries. Most notably, style plugins from the system won’t have any effect on PySide applications." source: https://doc.qt.io/qtforpython-6/quickstart.html </sup> This means you won't use your system's default style if you use pip to install pyside6, AFAIK.
 
@@ -82,7 +78,7 @@ You can use `invoke --list` for all available tasks, use `invoke --help <command
 	- [x] Test pyinstaller on linux
 	- [x] Test pyinstaller on windows
 	- [ ] Test pyinstaller on macOS
-	- [ ] Add `Instructions.txt` file in `dist/ImageDreamer`
+	- [ ] Add `Instructions.txt` file in `dist/ImageDreamer`?
 - [ ] Maybe refactor main.qml
 
 ---

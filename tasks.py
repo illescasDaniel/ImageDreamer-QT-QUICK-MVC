@@ -64,7 +64,7 @@ def run(ctx: Context):
 ###### Building the executable ######
 
 @task(help={
-	'show_terminal': 'Show terminal window (buggy right now, True by default)',
+	'show_terminal': 'Show terminal window (True by default, although it might be safe to use False)',
 })
 def build(ctx: Context, show_terminal: bool = True):
 	'''
@@ -89,15 +89,6 @@ def build(ctx: Context, show_terminal: bool = True):
 		ctx.run(command)
 		# create an output folder for images generation
 		os.makedirs('dist/ImageDreamer/output', exist_ok=True)
-		# copy model
-		model_destination_dir = 'dist/ImageDreamer/resources/models/'
-		os.makedirs(model_destination_dir, exist_ok=True)
-		model_source_dir = next(Path('resources/models').glob('*.safetensors'), None)
-		shutil.copy(src=str(model_source_dir), dst=model_destination_dir)
-		# create an empty placeholder file inside the models folder
-		file_path = 'dist/ImageDreamer/resources/models/place-your-safetensors-model-here'
-		with open(file_path, 'w'):
-			pass
 	except Exception as e:
 		print(f'An error occurred while building the executable: {e}')
 		print('Make sure you have "pyinstaller" installed by running "conda install pyinstaller" or "pip install pyinstaller"')
