@@ -36,6 +36,8 @@ class AppUtils:
 		)
 		sys.stdout = StreamToLogger(logging.getLogger('STDOUT'), logging.INFO)
 		sys.stderr = StreamToLogger(logging.getLogger('STDERR'), logging.ERROR)
+		from diffusers.utils.logging import disable_progress_bar
+		disable_progress_bar()
 
 	@staticmethod
 	def set_up_logging(logging_level: int):
