@@ -91,7 +91,7 @@ class TextToImageRepository:
 		temp_images_paths: list[Path] = []
 		# generate image
 		def callback_dynamic_cfg(pipe, step_index, timestep, callback_kwargs):
-			# TODO: add a way to stop the pipeline when user exists? to stop: pipeline._interrupt = True
+			# TODO: add a way to stop the pipeline when user exits? to stop: pipeline._interrupt = True
 			# calculate progress and send it
 			progress: float = float(step_index+1) / float(TextToImageRepository.__TOTAL_STEPS)
 			# get temporary images

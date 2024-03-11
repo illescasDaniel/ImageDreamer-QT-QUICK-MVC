@@ -6,9 +6,13 @@ from pathlib import Path
 from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
-import torch
 
 from models.utils.app_utils import AppUtils
+
+def clean_up():
+	import torch
+	torch.cuda.empty_cache()
+	logging.debug('Exiting app')
 
 if __name__ == "__main__":
 
@@ -24,6 +28,7 @@ if __name__ == "__main__":
 	app = QGuiApplication(sys.argv)
 	app_icon_path = str(AppUtils.app_base_path() / 'assets' / 'app_icon.png')
 	app.setWindowIcon(QIcon(app_icon_path))
+	app.aboutToQuit.connect(clean_up)
 
 	if platform.system() == 'Windows':
 		QQuickStyle.setStyle("Universal")
@@ -43,5 +48,5 @@ if __name__ == "__main__":
 
 	if not engine.rootObjects():
 		sys.exit(-1)
-	torch.cuda.empty_cache()
+
 	sys.exit(app.exec())
