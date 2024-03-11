@@ -1,12 +1,11 @@
 import os
 from pathlib import Path
 import time
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, Optional
 import uuid
 import re
 import unicodedata
 import logging
-import subprocess
 
 from diffusers.pipelines.stable_diffusion_xl.pipeline_stable_diffusion_xl import StableDiffusionXLPipeline
 from diffusers.pipelines.stable_diffusion_xl.pipeline_output import StableDiffusionXLPipelineOutput
@@ -32,6 +31,8 @@ class TextToImageRepository:
 	__TOTAL_STEPS: int = 8
 	__PROMPT_MAX_TOKENS: int = 75
 	__USE_EXTREME_MEMORY_OPTIMIZATIONS: bool = True
+	__OUTPUT_PATH: Path = AppUtils.app_base_path().parent / 'output'
+	__MODEL_OR_PATH: str = 'https://huggingface.co/Lykon/dreamshaper-xl-v2-turbo/blob/main/DreamShaperXL_Turbo_V2-SFW.safetensors'
 
 	def initialize(self):
 		# free-up resources
@@ -40,7 +41,7 @@ class TextToImageRepository:
 		device = TorchUtils.get_device()
 		# alternative for generic model: AutoPipelineForText2Image.from_pretrained(pretrained_model_or_path='lykon/dreamshaper-xl-v2-turbo',...)
 		sd_pipeline: StableDiffusionXLPipeline = StableDiffusionXLPipeline.from_single_file(
-			pretrained_model_link_or_path='https://huggingface.co/Lykon/dreamshaper-xl-v2-turbo/blob/main/DreamShaperXL_Turbo_V2-SFW.safetensors',
+			pretrained_model_link_or_path=TextToImageRepository.__MODEL_OR_PATH,
 			torch_dtype=torch.float16,
 			variant="fp16",
 			add_watermarker=True
@@ -93,14 +94,11 @@ class TextToImageRepository:
 			# TODO: add a way to stop the pipeline when user exists? to stop: pipeline._interrupt = True
 			# calculate progress and send it
 			progress: float = float(step_index+1) / float(TextToImageRepository.__TOTAL_STEPS)
-			# log gpu usage
-			if step_index == TextToImageRepository.__TOTAL_STEPS-1:
-				logging.info(f"GPU usage: {self.__get_nvidia_vram_usage()} MiB")
 			# get temporary images
 			try:
 				latents: torch.Tensor = callback_kwargs["latents"]
 				image = self.__latents_to_rgb(latents)
-				image_path = AppUtils.app_base_path().parent / 'output' / f'{output_file_name}_step_{step_index}.png'
+				image_path = TextToImageRepository.__OUTPUT_PATH / f'{output_file_name}_step_{step_index}.png'
 				temp_images_paths.append(image_path)
 				image.save(image_path)
 				progress_callback(progress, image_path)
@@ -135,10 +133,10 @@ class TextToImageRepository:
 		# save image
 		image_path: Path
 		try:
-			image_path = AppUtils.app_base_path().parent / 'output' / f'{output_file_name}.png'
+			image_path = TextToImageRepository.__OUTPUT_PATH / f'{output_file_name}.png'
 			image.save(image_path)
-		except:
-			image_path = AppUtils.app_base_path().parent / 'output' / f'{uuid.uuid4()}.png'
+		except Exception:
+			image_path = TextToImageRepository.__OUTPUT_PATH / f'{uuid.uuid4()}.png'
 			image.save(image_path)
 		# free resources
 		self.cleanup()
@@ -162,7 +160,7 @@ class TextToImageRepository:
 		image: Image
 	) -> bool:
 		if TextToImageRepository.__UNSAFE_IMAGE_DETECTOR_ENABLED and self.__unsafe_image_detector is not None:
-			image_detector_output: List[dict[str, Any]] = self.__unsafe_image_detector(image) # type: ignore
+			image_detector_output: list[dict[str, Any]] = self.__unsafe_image_detector(image) # type: ignore
 			unsafe_values: dict[str, Any] | None = next((v for v in image_detector_output if v.get('label') == 'nsfw'), None)
 			if unsafe_values is None:
 				return False
@@ -171,16 +169,6 @@ class TextToImageRepository:
 			return unsafe_score > 0.6
 		else:
 			return False
-
-	def __get_nvidia_vram_usage(self) -> str:
-		if not torch.cuda.is_available():
-			return ''
-		try:
-			result = subprocess.run(['nvidia-smi', '--query-gpu=memory.used', '--format=csv,noheader,nounits'], stdout=subprocess.PIPE, text=True, check=True)
-			used_memory_list = [x for x in result.stdout.strip().split('\n')]
-			return '\n'.join(used_memory_list)
-		except:
-			return ''
 
 	# https://huggingface.co/docs/diffusers/main/en/using-diffusers/callback#display-image-after-each-generation-step
 	def __latents_to_rgb(self, latents: torch.Tensor):
