@@ -11,7 +11,7 @@ from tasks_utils import get_python_command, cleanup_compressed_files, get_safete
 ### Run app ##
 
 @task(help={
-	'log_level': 'Optional: specify the log level.',
+	'log_level': 'Set the logging level (default: DEBUG)',
 })
 def run(ctx: Context, log_level: Optional[str] = None):
 	'''
@@ -22,7 +22,7 @@ def run(ctx: Context, log_level: Optional[str] = None):
 	'''
 	execute_command = f'{get_python_command()} src/main.py'
 	if log_level is not None:
-		execute_command += f' --log {log_level}'
+		execute_command += f' --log-level {log_level}'
 	ctx.run(execute_command)
 
 ### Run tests ##

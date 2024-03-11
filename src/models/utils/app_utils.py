@@ -33,11 +33,11 @@ class AppUtils:
 	def set_up_logging(logging_level: int):
 		parser = argparse.ArgumentParser(description="Run the application with specified logging level.")
 		parser.add_argument(
-			"--log",
+			"--log-level",
 			default=logging.getLevelName(logging_level),
 			choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
 			help="Set the logging level (default: %(default)s)"
 		)
-		logging.basicConfig(level=logging.getLevelName(str(parser.parse_args().log)),
+		logging.basicConfig(level=logging.getLevelName(str(parser.parse_args().log_level)),
 							format='%(asctime)s - %(levelname)s - %(message)s',
 							datefmt='%Y-%m-%d %H:%M:%S')
