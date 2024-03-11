@@ -2,12 +2,14 @@ from pathlib import Path
 import sys
 import logging
 import argparse
+from typing import Callable
 
 from models.utils.stream_to_logger import StreamToLogger
 
 
 class AppUtils:
-	_app_base_path: Path
+	app_base_path: Path
+	exit_handlers: list[Callable[[], None]] = []
 
 	@staticmethod
 	def is_app_frozen() -> bool:
@@ -16,14 +18,6 @@ class AppUtils:
 			return True
 		else:
 			return False
-
-	@staticmethod
-	def app_base_path() -> Path:
-		return AppUtils._app_base_path
-
-	@staticmethod
-	def set_app_base_path(base_path: Path):
-		AppUtils._app_base_path = base_path
 
 	@staticmethod
 	def set_up_frozen_app_logging():

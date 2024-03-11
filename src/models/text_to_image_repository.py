@@ -23,6 +23,7 @@ from models.utils.torch_utils import TorchUtils
 
 class TextToImageRepository:
 	manual_seed: Optional[int] = None
+	__temp_images_paths: list[Path] = []
 	__generator: Optional[torch.Generator] = None
 	__sd_pipeline: Optional[StableDiffusionXLPipeline] = None
 	__device: Optional[torch.device] = None
@@ -31,7 +32,7 @@ class TextToImageRepository:
 	__TOTAL_STEPS: int = 8
 	__PROMPT_MAX_TOKENS: int = 75
 	__USE_EXTREME_MEMORY_OPTIMIZATIONS: bool = True
-	__OUTPUT_PATH: Path = AppUtils.app_base_path().parent / 'output'
+	__OUTPUT_PATH: Path = AppUtils.app_base_path.parent / 'output'
 	__MODEL_OR_PATH: str = 'https://huggingface.co/Lykon/dreamshaper-xl-v2-turbo/blob/main/DreamShaperXL_Turbo_V2-SFW.safetensors'
 
 	def initialize(self):
@@ -46,6 +47,7 @@ class TextToImageRepository:
 			variant="fp16",
 			add_watermarker=True
 		) # type: ignore
+		AppUtils.exit_handlers.insert(0, self.__interrupt_image_generation)
 		# disable cli progress bar on distributed executables
 		sd_pipeline.set_progress_bar_config(disable=AppUtils.is_app_frozen())
 		# enable optimizations
@@ -87,11 +89,8 @@ class TextToImageRepository:
 		progress_callback(0, None)
 		# get_clean_file_name
 		output_file_name = self.__output_file_name(prompt)
-		# list of temporary images
-		temp_images_paths: list[Path] = []
 		# generate image
 		def callback_dynamic_cfg(pipe, step_index, timestep, callback_kwargs):
-			# TODO: add a way to stop the pipeline when user exits? to stop: pipeline._interrupt = True
 			# calculate progress and send it
 			progress: float = float(step_index+1) / float(TextToImageRepository.__TOTAL_STEPS)
 			# get temporary images
@@ -99,7 +98,7 @@ class TextToImageRepository:
 				latents: torch.Tensor = callback_kwargs["latents"]
 				image = self.__latents_to_rgb(latents)
 				image_path = TextToImageRepository.__OUTPUT_PATH / f'{output_file_name}_step_{step_index}.png'
-				temp_images_paths.append(image_path)
+				self.__temp_images_paths.append(image_path)
 				image.save(image_path)
 				progress_callback(progress, image_path)
 			except Exception as e:
@@ -119,16 +118,14 @@ class TextToImageRepository:
 		) # type: ignore
 		# get image
 		image: Image = output.images[0]
-		# remove temporary images
-		for img_path in temp_images_paths:
-			try:
-				os.remove(img_path)
-			except Exception:
-				pass
+		# free resources
+		self.cleanup()
+		# raise if stopped
+		if self.__sd_pipeline.interrupt:
+			raise Exception('Image generation process was interrupted')
 		# check unsafe content
 		if self.__is_image_unsafe(image):
 			progress_callback(1, None)
-			self.cleanup()
 			raise Exception('Unsafe content detected')
 		# save image
 		image_path: Path
@@ -138,13 +135,24 @@ class TextToImageRepository:
 		except Exception:
 			image_path = TextToImageRepository.__OUTPUT_PATH / f'{uuid.uuid4()}.png'
 			image.save(image_path)
-		# free resources
-		self.cleanup()
 		# return image path
 		return image_path
 
 	def cleanup(self):
+		self.__remove_temp_images()
 		torch.cuda.empty_cache()
+
+	def __interrupt_image_generation(self):
+		if self.__sd_pipeline is not None:
+			self.__sd_pipeline._interrupt = True
+		self.cleanup()
+
+	def __remove_temp_images(self):
+		while self.__temp_images_paths:
+			try:
+				os.remove(self.__temp_images_paths.pop())
+			except Exception:
+				pass
 
 	def __output_file_name(self, prompt: str) -> str:
 		try:
@@ -155,10 +163,7 @@ class TextToImageRepository:
 			uuid_file_name = str(uuid.uuid4())
 			return uuid_file_name
 
-	def __is_image_unsafe(
-		self,
-		image: Image
-	) -> bool:
+	def __is_image_unsafe(self, image: Image) -> bool:
 		if TextToImageRepository.__UNSAFE_IMAGE_DETECTOR_ENABLED and self.__unsafe_image_detector is not None:
 			image_detector_output: list[dict[str, Any]] = self.__unsafe_image_detector(image) # type: ignore
 			unsafe_values: dict[str, Any] | None = next((v for v in image_detector_output if v.get('label') == 'nsfw'), None)

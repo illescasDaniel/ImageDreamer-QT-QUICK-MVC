@@ -7,21 +7,25 @@ from PySide6.QtCore import QObject, Signal, Slot
 
 from controllers.utils.text_to_image_state import TextToImageState
 from models.text_to_image_repository import TextToImageRepository
+from models.utils.app_utils import AppUtils
 
 
 class TextToImageController(QObject):
 	state = Signal('QVariantMap') # type: ignore
 	is_initialized = False
 	repository: TextToImageRepository
+	__image_generation_thread: Optional[Thread] = None
 
 	def __init__(self):
 		super().__init__()
 		self.repository = TextToImageRepository()
+		AppUtils.exit_handlers.append(self.__wait_for_image_generation_to_finish)
 
 	@Slot(str)
 	def generate(self, input_text: str):
 		self.state.emit(TextToImageState.INITIALIZING())
-		Thread(target=self.generate_image, args=(input_text,)).start()
+		self.__image_generation_thread = Thread(target=self.generate_image, args=(input_text,))
+		self.__image_generation_thread.start()
 
 	def generate_image(self, input_text: str):
 		try:
@@ -40,3 +44,7 @@ class TextToImageController(QObject):
 
 	def __progress_callback(self, progress: float, temporary_image_path: Optional[Path]):
 		self.state.emit(TextToImageState.GENERATING_IMAGE(progress, temporary_image_path))
+
+	def __wait_for_image_generation_to_finish(self):
+		if self.__image_generation_thread is not None:
+			self.__image_generation_thread.join()
