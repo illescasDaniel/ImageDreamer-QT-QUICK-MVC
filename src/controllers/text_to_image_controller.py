@@ -1,5 +1,7 @@
 import logging
+from pathlib import Path
 from threading import Thread
+from typing import Optional
 
 from PySide6.QtCore import QObject, Signal, Slot
 
@@ -36,5 +38,5 @@ class TextToImageController(QObject):
 			logging.fatal(exception)
 			self.state.emit(TextToImageState.ERROR(exception))
 
-	def __progress_callback(self, progress: float):
-		self.state.emit(TextToImageState.GENERATING_IMAGE(progress))
+	def __progress_callback(self, progress: float, temporary_image_path: Optional[Path]):
+		self.state.emit(TextToImageState.GENERATING_IMAGE(progress, temporary_image_path))

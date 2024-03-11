@@ -15,8 +15,11 @@ class TextToImageState(Enum):
 		return cls.__to_dict(cls.__INITIALIZING)
 
 	@classmethod
-	def GENERATING_IMAGE(cls, progress: float) -> dict[str, Any]:
-		return cls.__to_dict(cls.__GENERATING_IMAGE,progress=progress)
+	def GENERATING_IMAGE(cls, progress: float, temporary_image_path: Optional[Path]) -> dict[str, Any]:
+		image_path_str = str()
+		if temporary_image_path is not None:
+			image_path_str = temporary_image_path.as_uri()
+		return cls.__to_dict(cls.__GENERATING_IMAGE, progress=progress, image_path=image_path_str)
 
 	@classmethod
 	def SUCCESS(cls, image_path: Path) -> dict[str, Any]:

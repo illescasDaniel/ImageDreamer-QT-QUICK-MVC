@@ -7,4 +7,5 @@ xformers==0.0.24
 accelerate==0.27.0
 transformers==4.37.2
 setuptools==69.1.1
+invisible-watermark
 invoke

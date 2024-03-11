@@ -24,12 +24,25 @@ Popup {
 			id: progressBar
 			indeterminate: true
 			value: 0
+			ToolTip.visible: hovered && progressBar.indeterminate
+			ToolTip.text: "Initial run may take a few minutes to download all components."
+			ToolTip.delay: 300
+			ToolTip.timeout: 6000
 		}
 
 		Label {
 			Layout.alignment: Qt.AlignHCenter
 			id: label
-			text: "Processing..."
+			text: "Loading components"
+			ToolTip.visible: ma.containsMouse && progressBar.indeterminate
+			ToolTip.text: "Initial run may take a few minutes to download all components."
+			ToolTip.delay: 300
+			ToolTip.timeout: 6000
+			MouseArea {
+				id: ma
+				anchors.fill: parent
+				hoverEnabled: true
+			}
 		}
 	}
 }

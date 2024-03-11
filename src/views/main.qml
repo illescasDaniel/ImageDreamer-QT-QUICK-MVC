@@ -135,6 +135,11 @@ ApplicationWindow {
 				progressViewPopup.item.title = `Generating image: ${Math.floor(state.progress * 100)}%`
 				progressViewPopup.item.progressIsIndeterminate = false
 				progressViewPopup.item.progressValue = state.progress
+				if (state.progress > 0) {
+					outputImageView.source = state.imagePath
+					placeholderImageRectangle.visible = false
+					outputImageView.visible = true
+				}
 				break
 			case textToImageState.success:
 				progressViewPopup.item.visible = false
