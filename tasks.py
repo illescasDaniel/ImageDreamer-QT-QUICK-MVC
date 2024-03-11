@@ -10,12 +10,20 @@ from tasks_utils import get_python_command, cleanup_compressed_files, get_safete
 
 ### Run app ##
 
-@task
-def run(ctx: Context):
+@task(help={
+	'log_level': 'Optional: specify the log level.',
+})
+def run(ctx: Context, log_level: Optional[str] = None):
 	'''
 	Run the main.py app. Make sure you have the necessary dependencies installed.
+
+	Args:
+		log_level (Optional[str]): The log level, like DEBUG or WARNING.
 	'''
-	ctx.run(f'{get_python_command()} src/main.py')
+	execute_command = f'{get_python_command()} src/main.py'
+	if log_level is not None:
+		execute_command += f' --log {log_level}'
+	ctx.run(execute_command)
 
 ### Run tests ##
 
@@ -131,7 +139,7 @@ def run_executable(ctx: Context, log_level: Optional[str] = None):
 		execute_command = str(Path('./dist/ImageDreamer/ImageDreamer'))
 
 	if log_level is not None:
-		execute_command += f'--log {log_level}'
+		execute_command += f' --log {log_level}'
 
 	ctx.run(execute_command)
 

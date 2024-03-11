@@ -7,7 +7,7 @@ from PySide6.QtCore import QObject, Signal, Slot
 
 from controllers.utils.text_to_image_state import TextToImageState
 from models.text_to_image_repository import TextToImageRepository
-from models.utils.app_utils import AppUtils
+from models.utils.global_store import GlobalStore
 
 
 class TextToImageController(QObject):
@@ -19,7 +19,7 @@ class TextToImageController(QObject):
 	def __init__(self):
 		super().__init__()
 		self.repository = TextToImageRepository()
-		AppUtils.exit_handlers.append(self.__wait_for_image_generation_to_finish)
+		GlobalStore.exit_handlers.append(self.__wait_for_image_generation_to_finish)
 
 	@Slot(str)
 	def generate(self, input_text: str):
@@ -39,7 +39,7 @@ class TextToImageController(QObject):
 			self.state.emit(TextToImageState.SUCCESS(image_path=output_image_path))
 		except Exception as exception:
 			self.repository.cleanup()
-			logging.fatal(exception)
+			logging.error(exception)
 			self.state.emit(TextToImageState.ERROR(exception))
 
 	def __progress_callback(self, progress: float, temporary_image_path: Optional[Path]):

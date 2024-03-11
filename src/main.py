@@ -8,9 +8,10 @@ from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
 
 from models.utils.app_utils import AppUtils
+from models.utils.global_store import GlobalStore
 
 def clean_up():
-	for handler in AppUtils.exit_handlers:
+	for handler in GlobalStore.exit_handlers:
 		handler()
 	logging.debug('Exiting app')
 
@@ -18,15 +19,15 @@ if __name__ == "__main__":
 
 	if AppUtils.is_app_frozen():
 		py_installer_path = sys._MEIPASS # type: ignore
-		AppUtils.app_base_path = Path(py_installer_path)
+		GlobalStore.app_base_path = Path(py_installer_path)
 		AppUtils.set_up_frozen_app_logging()
 	else:
 		app_path = Path(__file__).resolve().parent
-		AppUtils.app_base_path = app_path
+		GlobalStore.app_base_path = app_path
 		AppUtils.set_up_logging(logging_level=logging.DEBUG)
 
 	app = QGuiApplication(sys.argv)
-	app_icon_path = str(AppUtils.app_base_path / 'assets' / 'app_icon.png')
+	app_icon_path = str(GlobalStore.app_base_path / 'assets' / 'app_icon.png')
 	app.setWindowIcon(QIcon(app_icon_path))
 	app.aboutToQuit.connect(clean_up)
 
@@ -43,7 +44,7 @@ if __name__ == "__main__":
 	context = engine.rootContext()
 	context.setContextProperty("textToImageController", textToImageController)
 
-	qml_file_path = AppUtils.app_base_path / 'views' / 'main.qml'
+	qml_file_path = GlobalStore.app_base_path / 'views' / 'main.qml'
 	engine.load(qml_file_path)
 
 	if not engine.rootObjects():

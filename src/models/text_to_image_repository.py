@@ -18,6 +18,7 @@ from PIL.Image import Image
 from PIL.Image import fromarray as Image_fromarray
 
 from models.utils.app_utils import AppUtils
+from models.utils.global_store import GlobalStore
 from models.utils.torch_utils import TorchUtils
 
 
@@ -32,7 +33,7 @@ class TextToImageRepository:
 	__TOTAL_STEPS: int = 8
 	__PROMPT_MAX_TOKENS: int = 75
 	__USE_EXTREME_MEMORY_OPTIMIZATIONS: bool = True
-	__OUTPUT_PATH: Path = AppUtils.app_base_path.parent / 'output'
+	__OUTPUT_PATH: Path = GlobalStore.app_base_path.parent / 'output'
 	__MODEL_OR_PATH: str = 'https://huggingface.co/Lykon/dreamshaper-xl-v2-turbo/blob/main/DreamShaperXL_Turbo_V2-SFW.safetensors'
 
 	def initialize(self):
@@ -47,7 +48,7 @@ class TextToImageRepository:
 			variant="fp16",
 			add_watermarker=True
 		) # type: ignore
-		AppUtils.exit_handlers.insert(0, self.__interrupt_image_generation)
+		GlobalStore.exit_handlers.insert(0, self.__interrupt_image_generation)
 		# disable cli progress bar on distributed executables
 		sd_pipeline.set_progress_bar_config(disable=AppUtils.is_app_frozen())
 		# enable optimizations
