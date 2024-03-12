@@ -4,6 +4,7 @@ Simple app to generate images from text. Currently, it is meant to use an SDXL T
 <p align="center">
 	<img src="assets/program_windows.png" alt="windows program screenshot" width="300" />
 	<img src="assets/program_gnome.png" alt="linux GNOME program screenshot" width="285" />
+	<img src="assets/program_gnome_anime.png" alt="linux GNOME program screenshot" width="285" />
 </p>
 
 ## Requirements
