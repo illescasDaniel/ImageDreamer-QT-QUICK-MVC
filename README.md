@@ -1,5 +1,5 @@
 # ImageDreamer-QT-QUICK-MVC
-Simple app to generate images from text. Currently, it is meant to use an SDXL Turbo model like DreamShaperXL.
+Simple app to generate images from text. Currently, it uses DreamShaperXL v2 (SDXL Turbo).
 
 <p align="center">
 	<img src="assets/program_windows.png" alt="windows program screenshot" width="300" />
@@ -8,7 +8,7 @@ Simple app to generate images from text. Currently, it is meant to use an SDXL T
 </p>
 
 ## Requirements
-- SDXL Turbo model like "DreamShaperXL v2 model", it will be automatically downloaded.
+- "DreamShaperXL v2 model", it will be automatically downloaded.
 - invoke (Optional, but recommended to easily build and run the app)
 - HuggingFace's accelerate, diffusers and transformers
 - Pytorch
