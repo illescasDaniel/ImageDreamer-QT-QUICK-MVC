@@ -12,7 +12,6 @@ Simple app to generate images from text. Currently, it is meant to use an SDXL T
 - HuggingFace's accelerate, diffusers and transformers
 - Pytorch
 - PySide6
-- xformers (optimizations for diffusers)
 - GPU required. It works with NVIDIA GPUs (tested on 8GB 4070 Laptop) and Apple Silicon chips (untested).
 
 ## Development requirements
@@ -42,7 +41,6 @@ https://docs.anaconda.com/free/miniconda/
 ## Easy installation using pip
 - **Notes**:
 	- I couldn't get this method to work on my Windows machine.
-	- Maybe you need to append "--find-links https://download.pytorch.org/whl/cu121" to the xformers dependency in the requirements.txt.
 1. Clone the repo. `git clone https://github.com/illescasDaniel/ImageDreamer-QT-QUICK-MVC.git`
 `cd ImageDreamer-QT-QUICK-MVC`
 2. Create a virtual environment: `python3 -m venv imagedreamer-env`

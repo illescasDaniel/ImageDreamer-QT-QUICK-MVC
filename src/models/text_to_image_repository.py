@@ -55,7 +55,6 @@ class TextToImageRepository:
 		if TextToImageRepository.__USE_EXTREME_MEMORY_OPTIMIZATIONS:
 			sd_pipeline = sd_pipeline.to(device)
 			sd_pipeline.enable_vae_slicing()
-			sd_pipeline.enable_xformers_memory_efficient_attention()
 			sd_pipeline.enable_sequential_cpu_offload(device=device)
 		else:
 			sd_pipeline.enable_model_cpu_offload(device=device)

@@ -3,7 +3,6 @@ from typing import Optional
 from invoke.tasks import task
 from invoke.context import Context
 from pathlib import Path
-import xformers
 import shutil
 import os
 from tasks_utils import get_python_command, cleanup_compressed_files, get_safetensors_path_or_exception
@@ -90,13 +89,24 @@ def build(ctx: Context, show_terminal: bool = True):
 			os.remove('ImageDreamer.spec')
 		except FileNotFoundError:
 			pass
-		# run pyinstaller command, we need to copy the xformers folder contents too
-		xformers_path = Path(xformers.__file__).parent
+		# run pyinstaller command
 		windowed_or_not = '' if show_terminal else '--windowed '
-		command = f'pyinstaller --name ImageDreamer -y {windowed_or_not}--hidden-import=pathlib --icon=resources/app_icon.ico --add-data "src/views:views" --add-data "{xformers_path}:xformers" --add-data "src/assets:assets" src/main.py'
+		command = f'pyinstaller --name ImageDreamer -y {windowed_or_not}--hidden-import=pathlib --exclude-module triton --exclude-module datasets --exclude-module pandas --exclude-module gmpy2 --icon=resources/app_icon.ico --add-data "src/views:views" --add-data "src/assets:assets" src/main.py'
 		ctx.run(command)
 		# create an output folder for images generation
 		os.makedirs('dist/ImageDreamer/output', exist_ok=True)
+		# if we can delete certain files that we don't use, do so
+		files_safe_to_delete = [
+			'dist/ImageDreamer/_internal/torch/lib/libcudnn_adv_train.so.8',
+			'dist/ImageDreamer/_internal/torch/lib/libcudnn_ops_train.so.8',
+			'dist/ImageDreamer/_internal/torch/lib/libcudnn_cnn_train.so.8',
+			'dist/ImageDreamer/_internal/libcusolver.so.11',
+		]
+		for file in files_safe_to_delete:
+			try:
+				os.remove(file)
+			except Exception as e:
+				print(f'Error removing unnecessary file: {e}')
 	except Exception as e:
 		print(f'An error occurred while building the executable: {e}')
 		print('Make sure you have "pyinstaller" installed by running "conda install pyinstaller" or "pip install pyinstaller"')
