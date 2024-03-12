@@ -35,9 +35,9 @@ https://docs.anaconda.com/free/miniconda/
 5. Run the app: `invoke run`
 6. Images will be saved to the output folder automatically.
 
-**Note:** this is the preferred way, since using pip won't use your system theme.
+**Note:** this is the preferred way.
 
-**NOTE:** The first time you run it, after you press the "Generate" button it will download the model, please be patient, you can see the progress in the terminal where you run the command.
+**NOTE:** The first time you run it, after you press the "Generate" button it will download the model/s, please be patient, you can see the progress in the terminal where you run the command.
 
 ## Easy installation using pip
 - **Notes**:
