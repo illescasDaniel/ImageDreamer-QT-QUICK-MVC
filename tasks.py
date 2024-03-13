@@ -95,18 +95,6 @@ def build(ctx: Context, show_terminal: bool = True):
 		ctx.run(command)
 		# create an output folder for images generation
 		os.makedirs('dist/ImageDreamer/output', exist_ok=True)
-		# if we can delete certain files that we don't use, do so
-		files_safe_to_delete = [
-			'dist/ImageDreamer/_internal/torch/lib/libcudnn_adv_train.so.8',
-			'dist/ImageDreamer/_internal/torch/lib/libcudnn_ops_train.so.8',
-			'dist/ImageDreamer/_internal/torch/lib/libcudnn_cnn_train.so.8',
-			'dist/ImageDreamer/_internal/libcusolver.so.11',
-		]
-		for file in files_safe_to_delete:
-			try:
-				os.remove(file)
-			except Exception as e:
-				print(f'Error removing unnecessary file: {e}')
 	except Exception as e:
 		print(f'An error occurred while building the executable: {e}')
 		print('Make sure you have "pyinstaller" installed by running "conda install pyinstaller" or "pip install pyinstaller"')
