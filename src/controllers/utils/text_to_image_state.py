@@ -11,8 +11,8 @@ class TextToImageState(Enum):
 	__ERROR = 5
 
 	@classmethod
-	def INITIALIZING(cls, total_downloaded_megabytes: Optional[float] = None) -> dict[str, Any]:
-		return cls.__to_dict(cls.__INITIALIZING, total_downloaded_megabytes=total_downloaded_megabytes)
+	def INITIALIZING(cls, downloaded_data_in_megabytes: Optional[float] = None) -> dict[str, Any]:
+		return cls.__to_dict(cls.__INITIALIZING, downloaded_data_in_megabytes=downloaded_data_in_megabytes)
 
 	@classmethod
 	def GENERATING_IMAGE(cls, progress: float, temporary_image_path: Optional[Path]) -> dict[str, Any]:
@@ -34,14 +34,14 @@ class TextToImageState(Enum):
 		cls,
 		value: Enum,
 		progress: Optional[float] = None,
-		total_downloaded_megabytes: Optional[float] = None,
+		downloaded_data_in_megabytes: Optional[float] = None,
 		image_path: Optional[str] = None,
 		error_message_details: Optional[str] = None
 	) -> dict[str, Any]:
 		return {
 			'value': value,
 			'progress': progress,
-			'totalDownloadedMegabytes': total_downloaded_megabytes,
+			'downloadedDataInMegabytes': downloaded_data_in_megabytes,
 			'imagePath': image_path,
 			'error_message_details': error_message_details
 		}

@@ -30,7 +30,7 @@ class TextToImageController(QObject):
 		self.state.emit(TextToImageState.INITIALIZING())
 		try:
 			if not self.is_initialized:
-				self.repository.initialize(self.__initialize_total_download_callback)
+				self.repository.initialize(self.__downloaded_data_callback)
 				self.is_initialized = True
 			output_image_path = self.repository.generateImage(
 				prompt=input_text,
@@ -42,8 +42,8 @@ class TextToImageController(QObject):
 			logging.error(exception)
 			self.state.emit(TextToImageState.ERROR(exception))
 
-	def __initialize_total_download_callback(self, total_downloaded_megabytes: float):
-		self.state.emit(TextToImageState.INITIALIZING(total_downloaded_megabytes))
+	def __downloaded_data_callback(self, data_in_megabytes: float):
+		self.state.emit(TextToImageState.INITIALIZING(data_in_megabytes))
 
 	def __progress_callback(self, progress: float, temporary_image_path: Optional[Path]):
 		self.state.emit(TextToImageState.GENERATING_IMAGE(progress, temporary_image_path))

@@ -155,9 +155,9 @@ ApplicationWindow {
 				progressViewPopup.item.visible = true
 				progressViewPopup.item.progressValue = 0
 				progressViewPopup.item.progressIsIndeterminate = true
-				const totalDownloadSizeInMB = state.totalDownloadedMegabytes
-				if (totalDownloadSizeInMB && totalDownloadSizeInMB > 10) {
-					const formattedValue = Math.floor(totalDownloadSizeInMB)
+				const downloadedDataInMegabytes = state.downloadedDataInMegabytes
+				if (downloadedDataInMegabytes && downloadedDataInMegabytes > 10) {
+					const formattedValue = Math.floor(downloadedDataInMegabytes)
 					progressViewPopup.item.title = `Loading components\n${formattedValue}MB / +7GB`
 				} else {
 					progressViewPopup.item.title = "Loading components"

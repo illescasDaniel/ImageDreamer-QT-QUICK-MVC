@@ -13,7 +13,7 @@ from models.utils.global_store import GlobalStore
 def clean_up():
 	for handler in GlobalStore.exit_handlers:
 		handler()
-	logging.debug('Exiting app')
+	logging.debug('Closing app')
 
 if __name__ == "__main__":
 
