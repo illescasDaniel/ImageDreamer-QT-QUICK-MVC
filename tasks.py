@@ -5,7 +5,7 @@ from invoke.context import Context
 from pathlib import Path
 import shutil
 import os
-from tasks_utils import get_python_command, cleanup_compressed_files, get_safetensors_path_or_exception
+from tasks_utils import get_python_command, cleanup_compressed_files
 
 ### Run app ##
 
@@ -107,8 +107,7 @@ def create_tar_ball(ctx: Context):
 	'''
 	output_file_path = 'dist/ImageDreamer/image_dreamer_no_model.tar.gz'
 	cleanup_compressed_files()
-	safetensors_file_path = str(get_safetensors_path_or_exception('dist/ImageDreamer/resources/models'))
-	ctx.run(f'tar -czvf "{output_file_path}" --exclude="{safetensors_file_path}" dist/ImageDreamer/')
+	ctx.run(f'tar -czvf "{output_file_path}" dist/ImageDreamer/')
 
 @task
 def create_7zip(ctx: Context):
@@ -117,8 +116,7 @@ def create_7zip(ctx: Context):
 	'''
 	output_file_path = 'dist/ImageDreamer/image_dreamer_no_model.7z'
 	cleanup_compressed_files()
-	safetensors_file_path = str(get_safetensors_path_or_exception('dist/ImageDreamer/resources/models'))
-	ctx.run(f'7z a -t7z -m0=lzma2 -mx=9 -ms=on -x!{safetensors_file_path} {output_file_path} dist/ImageDreamer/')
+	ctx.run(f'7z a -t7z -m0=lzma2 -mx=9 -ms=on {output_file_path} dist/ImageDreamer/')
 
 @task(help={
 	'log_level': 'Optional: specify the log level.',

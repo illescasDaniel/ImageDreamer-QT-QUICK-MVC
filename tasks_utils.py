@@ -1,7 +1,5 @@
 import subprocess
 import os
-import platform
-from pathlib import Path
 
 
 def get_python_command() -> str:
@@ -20,9 +18,3 @@ def cleanup_compressed_files():
 			os.remove(file)
 		except FileNotFoundError:
 			pass
-
-def get_safetensors_path_or_exception(root_folder: str) -> Path:
-	safetensors_file = next(Path(root_folder).glob('*.safetensors'), None)
-	if safetensors_file is None:
-		raise FileNotFoundError('File not found')
-	return safetensors_file
