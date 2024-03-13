@@ -5,7 +5,7 @@ from invoke.context import Context
 from pathlib import Path
 import shutil
 import os
-from tasks_utils import get_python_command, cleanup_compressed_files, get_safetensors_path_or_exception, delete_unnused_files_for_built_program
+from tasks_utils import get_python_command, cleanup_compressed_files, get_safetensors_path_or_exception
 
 ### Run app ##
 
@@ -95,8 +95,6 @@ def build(ctx: Context, show_terminal: bool = True):
 		ctx.run(command)
 		# create an output folder for images generation
 		os.makedirs('dist/ImageDreamer/output', exist_ok=True)
-		# if we can delete certain files that we don't use, do so
-		delete_unnused_files_for_built_program()
 	except Exception as e:
 		print(f'An error occurred while building the executable: {e}')
 		print('Make sure you have "pyinstaller" installed by running "conda install pyinstaller" or "pip install pyinstaller"')
