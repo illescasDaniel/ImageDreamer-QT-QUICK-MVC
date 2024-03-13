@@ -25,7 +25,7 @@ Popup {
 			indeterminate: true
 			value: 0
 			ToolTip.visible: hovered && progressBar.indeterminate
-			ToolTip.text: "Initial run may take a few minutes to download all components."
+			ToolTip.text: "Initial run may take a few minutes to download all components (around 7GB)."
 			ToolTip.delay: 300
 			ToolTip.timeout: 6000
 		}
@@ -34,8 +34,10 @@ Popup {
 			Layout.alignment: Qt.AlignHCenter
 			id: label
 			text: "Loading components"
+			font.family: "monospace"
+			horizontalAlignment: Text.AlignHCenter
 			ToolTip.visible: ma.containsMouse && progressBar.indeterminate
-			ToolTip.text: "Initial run may take a few minutes to download all components."
+			ToolTip.text: "Initial run may take a few minutes to download all components (around 7GB)."
 			ToolTip.delay: 300
 			ToolTip.timeout: 6000
 			MouseArea {

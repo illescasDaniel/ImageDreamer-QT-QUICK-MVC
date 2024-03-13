@@ -23,14 +23,14 @@ class TextToImageController(QObject):
 
 	@Slot(str)
 	def generate(self, input_text: str):
-		self.state.emit(TextToImageState.INITIALIZING())
 		self.__image_generation_thread = Thread(target=self.generate_image, args=(input_text,))
 		self.__image_generation_thread.start()
 
 	def generate_image(self, input_text: str):
+		self.state.emit(TextToImageState.INITIALIZING())
 		try:
 			if not self.is_initialized:
-				self.repository.initialize()
+				self.repository.initialize(self.__initialize_total_download_callback)
 				self.is_initialized = True
 			output_image_path = self.repository.generateImage(
 				prompt=input_text,
@@ -42,9 +42,12 @@ class TextToImageController(QObject):
 			logging.error(exception)
 			self.state.emit(TextToImageState.ERROR(exception))
 
+	def __initialize_total_download_callback(self, total_downloaded_megabytes: float):
+		self.state.emit(TextToImageState.INITIALIZING(total_downloaded_megabytes))
+
 	def __progress_callback(self, progress: float, temporary_image_path: Optional[Path]):
 		self.state.emit(TextToImageState.GENERATING_IMAGE(progress, temporary_image_path))
 
 	def __wait_for_image_generation_to_finish(self):
 		if self.__image_generation_thread is not None:
-			self.__image_generation_thread.join()
+			self.__image_generation_thread.join(10)

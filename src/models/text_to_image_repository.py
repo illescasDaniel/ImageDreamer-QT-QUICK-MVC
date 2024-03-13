@@ -6,6 +6,9 @@ import uuid
 import re
 import unicodedata
 import logging
+import sys
+import psutil
+from threading import Thread
 
 from diffusers.pipelines.stable_diffusion_xl.pipeline_stable_diffusion_xl import StableDiffusionXLPipeline
 from diffusers.pipelines.stable_diffusion_xl.pipeline_output import StableDiffusionXLPipelineOutput
@@ -29,6 +32,8 @@ class TextToImageRepository:
 	__sd_pipeline: Optional[StableDiffusionXLPipeline] = None
 	__device: Optional[torch.device] = None
 	__unsafe_image_detector: Optional[ImageClassificationPipeline] = None
+	__exiting: bool = False
+	__total_download_monitor_thread: Optional[Thread] = None
 	__UNSAFE_IMAGE_DETECTOR_ENABLED: bool = True
 	__TOTAL_STEPS: int = 8
 	__PROMPT_MAX_TOKENS: int = 75
@@ -36,11 +41,15 @@ class TextToImageRepository:
 	__OUTPUT_PATH: Path = GlobalStore.app_base_path.parent / 'output'
 	__MODEL_OR_PATH: str = 'https://huggingface.co/Lykon/dreamshaper-xl-v2-turbo/blob/main/DreamShaperXL_Turbo_V2-SFW.safetensors'
 
-	def initialize(self):
+	def initialize(self, total_download_callback: Callable[[float], None]):
 		# free-up resources
 		self.cleanup()
 		# get pipeline
 		device = TorchUtils.get_device()
+		# start download rate monitor
+		self.__total_download_monitor_thread = Thread(target=self.__background_total_downloaded, args=(total_download_callback,))
+		self.__total_download_monitor_thread.start()
+		GlobalStore.exit_handlers.insert(0, self.__interrupt_image_generation)
 		# alternative for generic model: AutoPipelineForText2Image.from_pretrained(pretrained_model_or_path='lykon/dreamshaper-xl-v2-turbo',...)
 		sd_pipeline: StableDiffusionXLPipeline = StableDiffusionXLPipeline.from_single_file(
 			pretrained_model_link_or_path=TextToImageRepository.__MODEL_OR_PATH,
@@ -48,9 +57,11 @@ class TextToImageRepository:
 			variant="fp16",
 			add_watermarker=True
 		) # type: ignore
-		GlobalStore.exit_handlers.insert(0, self.__interrupt_image_generation)
+		if self.__exiting:
+			self.__total_download_monitor_thread.join(2)
+			raise Exception('App finished by user')
 		# disable cli progress bar on distributed executables
-		sd_pipeline.set_progress_bar_config(disable=AppUtils.is_app_frozen())
+		sd_pipeline.set_progress_bar_config(disable=AppUtils.is_app_frozen(), file=sys.stdout)
 		# enable optimizations
 		if TextToImageRepository.__USE_EXTREME_MEMORY_OPTIMIZATIONS:
 			sd_pipeline = sd_pipeline.to(device)
@@ -72,6 +83,8 @@ class TextToImageRepository:
 		# assign local variables
 		self.__sd_pipeline = sd_pipeline
 		self.__device = device
+		# finish downloads monitoring
+		self.__total_download_monitor_thread.join(5)
 
 	def generateImage(self, prompt: str, progress_callback: Callable[[float, Optional[Path]], None]) -> Path:
 		# free-up resources
@@ -91,6 +104,8 @@ class TextToImageRepository:
 		output_file_name = self.__output_file_name(prompt)
 		# generate image
 		def callback_dynamic_cfg(pipe, step_index, timestep, callback_kwargs):
+			if self.__exiting:
+				pipe._interrupt = True
 			# calculate progress and send it
 			progress: float = float(step_index+1) / float(TextToImageRepository.__TOTAL_STEPS)
 			# get temporary images
@@ -142,10 +157,32 @@ class TextToImageRepository:
 		self.__remove_temp_images()
 		torch.cuda.empty_cache()
 
+	def __total_downloaded_generator(self):
+		initial_data = psutil.net_io_counters().bytes_recv  # Initial download data in bytes
+		previous_total_downloaded_mb: float = 0
+		while self.__sd_pipeline is None and not self.__exiting:
+			time.sleep(1)
+			# Current data received
+			current_data = psutil.net_io_counters().bytes_recv
+			# Calculate total downloaded data in MB since the generator started
+			total_downloaded_mb = (current_data - initial_data) / (1024 ** 2)
+			if abs(total_downloaded_mb - previous_total_downloaded_mb) > 1: # change to 0.1 or 1
+				yield total_downloaded_mb
+
+	def __background_total_downloaded(self, total_download_callback: Callable[[float], None]):
+		for mega_bytes_recv_per_sec in self.__total_downloaded_generator():
+			total_download_callback(mega_bytes_recv_per_sec)
+			logging.info(f"Total downloaded: {mega_bytes_recv_per_sec:.2f} MB")
+			if self.__sd_pipeline is not None or self.__exiting:
+				break
+
 	def __interrupt_image_generation(self):
+		self.__exiting = True
 		if self.__sd_pipeline is not None:
 			self.__sd_pipeline._interrupt = True
 		self.cleanup()
+		if self.__total_download_monitor_thread is not None:
+			self.__total_download_monitor_thread.join(5)
 
 	def __remove_temp_images(self):
 		while self.__temp_images_paths:

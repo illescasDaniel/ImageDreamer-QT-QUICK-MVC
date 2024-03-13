@@ -18,11 +18,11 @@ class AppUtils:
 	@staticmethod
 	def set_up_frozen_app_logging():
 		logging.basicConfig(
-			filename='app.log',  # Log file path
+			filename='app.log',
 			filemode='a',  # Append mode ('w' for overwrite mode)
-			format='%(asctime)s - %(levelname)s - %(message)s',  # Format of log messages
-			datefmt='%Y-%m-%d %H:%M:%S',  # Format of timestamps
-			level=logging.WARNING  # Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+			format='%(asctime)s - %(levelname)s - %(message)s',
+			datefmt='%Y-%m-%d %H:%M:%S',
+			level=logging.WARNING
 		)
 		sys.stdout = StreamToLogger(logging.getLogger('STDOUT'), logging.INFO)
 		sys.stderr = StreamToLogger(logging.getLogger('STDERR'), logging.ERROR)

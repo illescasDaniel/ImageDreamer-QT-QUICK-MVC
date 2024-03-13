@@ -30,6 +30,36 @@ ApplicationWindow {
 						textToImageController.generate(inputText.text)
 					}
 				}
+
+				TapHandler {
+					acceptedButtons: Qt.RightButton
+					acceptedDevices: PointerDevice.Mouse
+					onTapped: (qEventPoint) => {
+						contextMenu.x = qEventPoint.scenePosition.x
+						contextMenu.y = qEventPoint.scenePosition.y
+						contextMenu.visible = true
+					}
+				}
+			}
+		}
+
+		Menu {
+			id: contextMenu
+			MenuItem {
+				text: "Cut"
+				onTriggered: inputText.cut()
+			}
+			MenuItem {
+				text: "Copy"
+				onTriggered: inputText.copy()
+			}
+			MenuItem {
+				text: "Paste"
+				onTriggered: inputText.paste()
+			}
+			MenuItem {
+				text: "Select All"
+				onTriggered: inputText.selectAll()
 			}
 		}
 
@@ -125,17 +155,24 @@ ApplicationWindow {
 				progressViewPopup.item.visible = true
 				progressViewPopup.item.progressValue = 0
 				progressViewPopup.item.progressIsIndeterminate = true
-				progressViewPopup.item.title = "Loading components"
+				const totalDownloadSizeInMB = state.totalDownloadedMegabytes
+				if (totalDownloadSizeInMB && totalDownloadSizeInMB > 10) {
+					const formattedValue = Math.floor(totalDownloadSizeInMB)
+					progressViewPopup.item.title = `Loading components\n${formattedValue}MB / +7GB`
+				} else {
+					progressViewPopup.item.title = "Loading components"
+				}
 				outputImageView.source = ""
 				outputImageView.visible = false
 				placeholderImageRectangle.visible = true
 				errorMessageDialog.detailedText = ""
 				break
 			case textToImageState.generatingImage:
-				progressViewPopup.item.title = `Generating image: ${Math.floor(state.progress * 100)}%`
+				const percentageProgress = Math.floor(state.progress * 100)
+				progressViewPopup.item.title = `Generating image: ${percentageProgress < 10 ? '  ' : percentageProgress < 100 ? ' ' : ''}${percentageProgress}%`
 				progressViewPopup.item.progressIsIndeterminate = false
 				progressViewPopup.item.progressValue = state.progress
-				if (state.progress > 0) {
+				if (state.progress > 0 && state.imagePath) {
 					outputImageView.source = state.imagePath
 					placeholderImageRectangle.visible = false
 					outputImageView.visible = true
