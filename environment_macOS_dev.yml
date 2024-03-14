@@ -15,5 +15,6 @@ dependencies:
   - requests
   - pipreqs
   - pip
+  - appdirs
   - pip:
       - invisible-watermark

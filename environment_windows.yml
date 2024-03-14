@@ -13,6 +13,7 @@ dependencies:
   - accelerate
   - invoke
   - pip
+  - appdirs
   - pip:
     - pyside6
     - invisible-watermark

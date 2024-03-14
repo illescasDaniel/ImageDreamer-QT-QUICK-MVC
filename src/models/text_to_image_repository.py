@@ -38,7 +38,7 @@ class TextToImageRepository:
 	__TOTAL_STEPS: int = 8
 	__MAX_TOKENS_FOR_PROMPT: int = 75
 	__USE_EXTREME_MEMORY_OPTIMIZATIONS: bool = True
-	__IMAGES_OUTPUT_PATH: Path = GlobalStore.app_base_path.parent / 'output'
+	__IMAGES_OUTPUT_PATH: Path = AppUtils.pictures_common_path()
 	__MODEL_OR_PATH: str = 'https://huggingface.co/Lykon/dreamshaper-xl-v2-turbo/blob/main/DreamShaperXL_Turbo_V2-SFW.safetensors'
 
 	def initialize(self, downloaded_data_in_megabytes_callback: Callable[[float], None]):

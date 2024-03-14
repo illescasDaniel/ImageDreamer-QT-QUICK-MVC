@@ -49,8 +49,6 @@ def build(ctx: Context, show_terminal: bool = True):
 		windowed_or_not = '' if show_terminal else '--windowed '
 		command = f'pyinstaller --name ImageDreamer -y {windowed_or_not}--hidden-import=pathlib --exclude-module triton --exclude-module datasets --exclude-module pandas --exclude-module gmpy2 --icon=resources/app_icon.ico --add-data "src/views:views" --add-data "src/assets:assets" src/main.py'
 		ctx.run(command)
-		# create an output folder for images generation
-		os.makedirs('dist/ImageDreamer/output', exist_ok=True)
 	except Exception as e:
 		print(f'An error occurred while building the executable: {e}')
 		print('Make sure you have "pyinstaller" installed by running "conda install pyinstaller" or "pip install pyinstaller"')

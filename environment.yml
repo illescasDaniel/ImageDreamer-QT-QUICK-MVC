@@ -14,5 +14,6 @@ dependencies:
   - accelerate
   - invoke
   - pip
+  - appdirs
   - pip:
       - invisible-watermark

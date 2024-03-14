@@ -116,6 +116,17 @@ ApplicationWindow {
 			verticalAlignment: Image.AlignBottom
 			smooth: true
 			visible: false
+
+			MouseArea {
+				anchors.fill: parent
+				cursorShape: Qt.PointingHandCursor
+				onClicked: {
+					const imagePath = outputImageView.source
+					if (imagePath) {
+						Qt.openUrlExternally(imagePath)
+					}
+				}
+			}
 		}
 	}
 

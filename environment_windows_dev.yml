@@ -16,6 +16,7 @@ dependencies:
   - pyinstaller
   - requests
   - pipreqs
+  - appdirs
   - pip:
     - pyside6
     - invisible-watermark

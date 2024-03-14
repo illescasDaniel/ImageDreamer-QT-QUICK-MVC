@@ -66,6 +66,16 @@ Use `invoke run` to run the python app.
 
 You can use `invoke --list` for all available tasks, use `invoke --help <command>` to get help about a specific command.
 
+**Logs** will be stored in these locations:
+- On Windows: C:\Users\<User>\AppData\Local\ImageDreamer\logs
+- On macOS: /Users/<User>/Library/Application Support/ImageDreamer/logs
+- On Linux: /home/<User>/.local/share/ImageDreamer/logs
+
+**Images** will be stored in these locations:
+- On Windows: C:\Users\<User>\AppData\Local\ImageDreamer\Pictures
+- On macOS: /Users/<User>/Library/Application Support/ImageDreamer/Pictures
+- On Linux: /home/<User>/.local/share/ImageDreamer/Pictures
+
 ### TODOs:
 - [ ] Add unit tests with `pytest`.
 	- [ ] Update tasks.py with tests
