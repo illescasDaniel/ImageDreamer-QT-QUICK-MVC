@@ -13,7 +13,7 @@ Simple app to generate images from text. Currently, it uses DreamShaperXL v2 (SD
 - HuggingFace's accelerate, diffusers and transformers
 - Pytorch
 - PySide6
-- GPU required. It works with NVIDIA GPUs (tested on 8GB 4070 Laptop) and Apple Silicon chips (untested).
+- GPU required. It works with NVIDIA GPUs (tested on 8GB 4070 Laptop) and Apple Silicon chips (tested on an M1 MAX with 32 GB of unified memory).
 
 ## Development requirements
 - pytest (unit tests)
@@ -67,17 +67,8 @@ Use `invoke run` to run the python app.
 You can use `invoke --list` for all available tasks, use `invoke --help <command>` to get help about a specific command.
 
 ### TODOs:
-- [ ] Test app on different devices. **[WIP]**
-	- [x] Test on linux
-	- [x] Test on windows
-	- [ ] Test on macOS
 - [ ] Add unit tests with `pytest`.
 	- [ ] Update tasks.py with tests
-- [ ] Test pyinstaller. **[WIP]**
-	- [x] Test pyinstaller on linux
-	- [x] Test pyinstaller on windows
-	- [ ] Test pyinstaller on macOS
-	- [ ] Add `Instructions.txt` file in `dist/ImageDreamer`?
 - [ ] Maybe refactor main.qml
 
 ---
