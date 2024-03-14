@@ -33,7 +33,6 @@ ApplicationWindow {
 
 				TapHandler {
 					acceptedButtons: Qt.RightButton
-					acceptedDevices: PointerDevice.Mouse
 					onTapped: (qEventPoint) => {
 						contextMenu.x = qEventPoint.scenePosition.x
 						contextMenu.y = qEventPoint.scenePosition.y
