@@ -24,50 +24,6 @@ def run(ctx: Context, log_level: Optional[str] = None):
 		execute_command += f' --log-level {log_level}'
 	ctx.run(execute_command)
 
-### Run tests ##
-
-# @task(help={
-# 	'show_prints': 'Force pytest to show prints even if the test passes.',
-# 	'logging_level': 'Optional: specific logging level. None by default.',
-# 	'test_name': 'Optional: specific test method to run. All by default.',
-# })
-# def test(
-# 	ctx: Context,
-# 		show_prints: bool = True,
-# 		logging_level: Optional[str] = None,
-# 		test_name: Optional[str] = None
-# 	):
-# 	'''
-# 	Run pytest to execute unit tests.
-# 	If a test_name is provided, only that test will be run.
-# 	'''
-# 	project_root = './'
-# 	source_code_root = './src'
-# 	os.environ['PYTHONPATH'] = f'{os.environ.get("PYTHONPATH")}:{project_root}:{source_code_root}'
-
-# 	pytest_command = 'pytest --color=yes'
-# 	# -rP: shows prints even if test passes
-# 	if show_prints:
-# 		pytest_command += f' -rP'
-# 	if logging_level is not None:
-# 		pytest_command += f' --log-cli-level={logging_level}'
-# 	# If a test name is provided, format the command to run that specific test
-# 	if test_name is not None:
-# 		pytest_command += f' -k {test_name}'
-
-# 	ctx.run(pytest_command)
-
-# @task
-# def test_report(ctx: Context):
-# 	'''
-# 	Run pytest to execute unit tests with coverage.
-# 	'''
-# 	project_root = './'
-# 	source_code_root = './src'
-# 	os.environ['PYTHONPATH'] = f'{os.environ.get("PYTHONPATH")}:{project_root}:{source_code_root}'
-
-# 	ctx.run('pytest --color=yes --cov=src/ --cov-report xml tests/')
-
 ###### Building the executable ######
 
 @task(help={
