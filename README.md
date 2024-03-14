@@ -20,7 +20,7 @@ Simple app to generate images from text. Currently, it uses DreamShaperXL v2 (SD
 - pyinstaller (create executable in tasks.py)
 - pipreqs (genereate requirements.txt in tasks.py)
 
-**TIP:** use `install-linux-dev.sh` to install these necessary dependencies to work on this project on a conda virtual environment named "ImageDreamer-dev".
+**TIP:** use `install-dev.sh` to install these necessary dependencies to work on this project on a conda virtual environment named "ImageDreamer-dev".
 
 ## Easy installation using conda (Anaconda/miniconda) [Recommended]
 1. Clone the repo. `git clone https://github.com/illescasDaniel/ImageDreamer-QT-QUICK-MVC.git`
