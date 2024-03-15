@@ -2,6 +2,9 @@ import subprocess
 import os
 
 
+app_name = "ImageDreamer"
+app_version = "1.0"
+
 def get_python_command() -> str:
 	"""Determine the Python command based on the availability of 'python3' or 'python'."""
 	try:
