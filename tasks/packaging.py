@@ -48,8 +48,10 @@ def create_appimage(ctx: Context):
 	# remove appdir folder
 	shutil.rmtree(appdir_path)
 	# make the AppImage executable
-	make_it_executable = f'chmod +x {app_name}-x86_64.AppImage'
+	make_it_executable = f'chmod +x {output_file}'
 	ctx.run(make_it_executable)
+	# move it to the dist folder
+	shutil.move(output_file, 'dist')
 	# success message
 	print(f'AppImage for {app_name} has been created.')
 

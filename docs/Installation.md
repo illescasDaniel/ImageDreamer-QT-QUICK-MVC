@@ -2,8 +2,8 @@
 
 This document outlines the steps for installing ImageDreamer-QT-QUICK-MVC using various methods. Choose the one that best fits your environment.
 
-## Conda Installation (Recommended)
-
+## Conda Installation
+(Recommended)
 1. Clone the repo and navigate inside the directory.
 2. Install Conda if not already installed: [Anaconda](https://www.anaconda.com/download) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html).
 3. Execute the installation script: run `install.py` (`./install.py` or `python install.py`)

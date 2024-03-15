@@ -10,9 +10,9 @@ Simple app to generate images from text. Currently, it uses DreamShaperXL v2 (SD
 
 ## Table of Contents
 - [Installation](docs/Installation.md)
-  - [Conda Installation (Recommended)](docs/Installation.md#conda)
-  - [Pip Installation](docs/Installation.md#pip)
-  - [UV Installation](docs/Installation.md#uv)
+  - [Conda Installation (Recommended)](docs/Installation.md#conda-installation)
+  - [Pip Installation](docs/Installation.md#pip-installation)
+  - [UV Installation](docs/Installation.md#uv-installation)
 - [Requirements](docs/Requirements.md)
 - [Development Requirements](docs/Development.md)
 - [Execution](docs/Execution.md)
