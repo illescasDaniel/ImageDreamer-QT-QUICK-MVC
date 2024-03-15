@@ -180,6 +180,7 @@ class TextToImageRepository:
 			total_downloaded_mb = (current_data - initial_data) / (1024 ** 2)
 			if abs(total_downloaded_mb - previous_total_downloaded_mb) > 1:
 				yield total_downloaded_mb
+			previous_total_downloaded_mb = total_downloaded_mb
 
 	def __interrupt_image_generation(self):
 		self.__app_is_closing = True

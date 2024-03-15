@@ -13,6 +13,7 @@ def setup_conda_environment(os_name: str, is_dev: bool):
 if __name__ == "__main__":
 	try:
 		parser = argparse.ArgumentParser(description='Project setup.')
+		# action=store_true => if the command-line argument is specified, the relevant variable is set to True
 		parser.add_argument('-d', '--dev', action='store_true', help='Set-up the development environment')
 		# Parse the command-line arguments
 		args = parser.parse_args()
