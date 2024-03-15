@@ -13,10 +13,17 @@ The following is a list of planned enhancements, features, and current tasks for
 
 ## Future enhancements/tasks
 
-- [ ] Create app installers:
-  - [x] Linux AppImage (see `create_appimage` in `/tasks/packaging.py`).
-  - [ ] MacOS .app  (use `inv build --no-show-terminal` in `tasks.py`). [WIP] The .app works but it launches itself multiple times after the image generation... that doesn't happen when simply using `inv run`.
-  - [ ] Windows signed installer.
+- [ ] Create **app installers** (WIP):
+  - [ ] Linux AppImage (see `create_appimage` in `/tasks/packaging.py`).
+    - [x] Ability to create AppImage
+    - [ ] Publish AppImage at https://www.appimagehub.com/
+  - [ ] MacOS .app  (use `inv build --no-show-terminal` in `tasks.py`).
+    - [x] Basic app folder. 
+    - [ ] Fix for app launching multiple times after starting image generation process (probably something related to memory consumption or threads). This behaviour doesn't happen when simply using `inv run`.
+  - [ ] Windows installer [WIP].
+    - [x] Basic installer/uninstaller.
+    - [ ] Add option in uninstaller to delete downloaded models at `%USERPROFILE%\.cache\huggingface`.
+    - [ ] Add option in uninstaller to delete user-generated images.
 
 - [ ] Release the app at itch.io
 
