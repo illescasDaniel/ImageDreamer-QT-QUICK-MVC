@@ -24,6 +24,7 @@ The following is a list of planned enhancements, features, and current tasks for
     - [x] Basic installer/uninstaller.
     - [ ] Add option in uninstaller to delete downloaded models at `%USERPROFILE%\.cache\huggingface`.
     - [ ] Add option in uninstaller to delete user-generated images.
+    - [ ] Maybe copying an image with Right Click > Copy doesn't work in the generated app (it does work when running the python app normally).
 
 - [ ] Release the app at itch.io
 
