@@ -1,6 +1,7 @@
 import sys
 import logging
 import argparse
+import os
 from pathlib import Path
 from appdirs import user_data_dir
 from urllib.parse import urlparse
@@ -29,7 +30,11 @@ class AppUtils:
 	def uri_to_path(uri: str):
 		parsed_uri = urlparse(uri)
 		if parsed_uri.scheme == 'file':
-			path = Path(parsed_uri.path)
+			if os.name == 'nt':
+				# Remove the leading '/' for Windows paths
+				path = Path(parsed_uri.path[1:])
+			else:
+				path = Path(parsed_uri.path)
 			return str(path)
 		else:
 			raise ValueError("Invalid file URI")

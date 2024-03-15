@@ -1,22 +1,22 @@
 import os
-from pathlib import Path
 import time
-from typing import Any, Callable, Optional
 import uuid
 import re
 import unicodedata
 import logging
 import sys
 import psutil
+from pathlib import Path
+from typing import Any, Callable, Optional
 from threading import Thread
 
+import torch
+import numpy as np
 from diffusers.pipelines.stable_diffusion_xl.pipeline_stable_diffusion_xl import StableDiffusionXLPipeline
 from diffusers.pipelines.stable_diffusion_xl.pipeline_output import StableDiffusionXLPipelineOutput
 from diffusers.schedulers.scheduling_euler_ancestral_discrete import EulerAncestralDiscreteScheduler
 from transformers import pipeline
 from transformers import ImageClassificationPipeline
-import torch
-import numpy as np
 from PIL.Image import Image
 from PIL.Image import fromarray as Image_fromarray
 

@@ -3,8 +3,8 @@ from pathlib import Path
 from threading import Thread
 from typing import Optional
 
-from PySide6.QtCore import QObject, Signal, Slot, QUrl
-from PySide6.QtGui import QImage, QGuiApplication
+from PySide6.QtCore import QObject, Signal, Slot
+from PySide6.QtGui import QGuiApplication
 
 from controllers.utils.text_to_image_state import TextToImageState
 from models.text_to_image_repository import TextToImageRepository
@@ -33,13 +33,11 @@ class TextToImageController(QObject):
 		return AppUtils.pictures_common_path().as_uri()
 
 	@Slot(str)
-	def copy_image_to_clipboard(self, imagePath):
+	def copy_image_to_clipboard(self, imagePath: str):
 		valid_path = AppUtils.uri_to_path(imagePath)
 		app: QGuiApplication = QGuiApplication.instance() #type: ignore
 		clipboard = app.clipboard()
-		image = QImage(valid_path)
-		if not image.isNull():
-			clipboard.setImage(image)
+		clipboard.setImage(valid_path)
 
 	# Private
 

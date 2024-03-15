@@ -1,8 +1,10 @@
 from invoke.collection import Collection
+
 from .execution import run, run_executable, run_app_image
 from .building import build
 from .packaging import create_appimage, create_tar_ball, create_7zip
 from .utility import generate_requirements
+
 
 ns = Collection()
 ns.add_task(run) #type: ignore
