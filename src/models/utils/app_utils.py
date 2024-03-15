@@ -6,6 +6,7 @@ from appdirs import user_data_dir
 from urllib.parse import urlparse
 
 from models.utils.stream_to_logger import StreamToLogger
+from models.utils.global_store import GlobalStore
 
 
 class AppUtils:
@@ -62,6 +63,12 @@ class AppUtils:
 		logging.basicConfig(level=logging.getLevelName(str(parser.parse_args().log_level)),
 							format='%(asctime)s - %(levelname)s - %(message)s',
 							datefmt='%Y-%m-%d %H:%M:%S')
+
+	@staticmethod
+	def clean_up():
+		for handler in GlobalStore.exit_handlers:
+			handler()
+		logging.debug('Closing app')
 
 	# Private
 

@@ -4,17 +4,12 @@ import logging
 from pathlib import Path
 
 from PySide6.QtGui import QGuiApplication, QIcon
-from PySide6.QtCore import QSharedMemory
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
 
 from models.utils.app_utils import AppUtils
 from models.utils.global_store import GlobalStore
 
-def clean_up():
-	for handler in GlobalStore.exit_handlers:
-		handler()
-	logging.debug('Closing app')
 
 if __name__ == "__main__":
 
@@ -30,7 +25,7 @@ if __name__ == "__main__":
 	app = QGuiApplication(sys.argv)
 	app_icon_path = str(GlobalStore.app_base_path / 'assets' / 'app_icon.png')
 	app.setWindowIcon(QIcon(app_icon_path))
-	app.aboutToQuit.connect(clean_up)
+	app.aboutToQuit.connect(AppUtils.clean_up)
 
 	if platform.system() == 'Windows':
 		QQuickStyle.setStyle("Universal")

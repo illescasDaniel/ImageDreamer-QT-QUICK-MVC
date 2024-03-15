@@ -1,11 +1,11 @@
 # ImageDreamer-QT-QUICK-MVC
 
-Simple app to generate images from text. Currently, it uses DreamShaperXL v2 (SDXL Turbo).
+Simple cross platform application to generate images from text. Currently, it uses DreamShaperXL v2 (SDXL Turbo).
 
 <p align="center">
-	<img src="assets/program_windows.png" alt="windows program screenshot" width="300" />
-	<img src="assets/program_gnome.png" alt="linux GNOME program screenshot" width="285" />
-	<img src="assets/program_gnome_anime.png" alt="linux GNOME program screenshot" width="285" />
+	<img src="assets/program_windows.jpg" alt="windows program screenshot" width="215" />
+	<img src="assets/program_mac.png" alt="linux GNOME program screenshot" width="218" />
+	<img src="assets/program_linux.png" alt="linux GNOME program screenshot" width="220" />
 </p>
 
 ## Table of Contents
