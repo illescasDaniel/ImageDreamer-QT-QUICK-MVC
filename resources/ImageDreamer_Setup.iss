@@ -7,6 +7,9 @@
 #define MyAppURL "https://github.com/illescasDaniel/ImageDreamer-QT-QUICK-MVC"
 #define MyAppExeName "ImageDreamer.exe"
 
+#define MyAppCodeLocation "C:\Users\kaumi\Documents\Code\ImageDreamer-QT-QUICK-MVC"
+#define MyAppInstallerOutputLocation "C:\Users\kaumi\Documents\Code\ImageDreamer_installer"
+
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
@@ -20,12 +23,12 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile=C:\Users\kaumi\Documents\Code\ImageDreamer-QT-QUICK-MVC\LICENSE.txt
+LicenseFile="{#MyAppCodeLocation}\LICENSE.txt"
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
-OutputDir=C:\Users\kaumi\Documents\Code\ImageDreamer_installer
+OutputDir={#MyAppInstallerOutputLocation}
 OutputBaseFilename=ImageDreamer_Setup
-SetupIconFile=C:\Users\kaumi\Documents\Code\ImageDreamer-QT-QUICK-MVC\resources\app_icon_setup.ico
+SetupIconFile="{#MyAppCodeLocation}\resources\app_icon_setup.ico"
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -37,8 +40,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\kaumi\Documents\Code\ImageDreamer-QT-QUICK-MVC\dist\ImageDreamer\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\kaumi\Documents\Code\ImageDreamer-QT-QUICK-MVC\dist\ImageDreamer\_internal\*"; DestDir: "{app}\_internal"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#MyAppCodeLocation}\dist\ImageDreamer\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppCodeLocation}\dist\ImageDreamer\_internal\*"; DestDir: "{app}\_internal"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
