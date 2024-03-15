@@ -30,6 +30,7 @@ class AppUtils:
 	def uri_to_path(uri: str):
 		parsed_uri = urlparse(uri)
 		if parsed_uri.scheme == 'file':
+			path: Path
 			if os.name == 'nt':
 				# Remove the leading '/' for Windows paths
 				path = Path(parsed_uri.path[1:])
