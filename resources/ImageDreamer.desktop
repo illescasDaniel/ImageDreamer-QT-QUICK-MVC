@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=ImageDreamer
+Exec=AppRun
+Icon=ImageDreamer
+Comment=Generate images from text
+Categories=Graphics;
+Terminal=false

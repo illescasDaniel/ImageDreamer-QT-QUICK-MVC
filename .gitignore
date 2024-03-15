@@ -172,3 +172,7 @@ output/*.png
 output/*.jpg
 
 *.safetensors
+
+*.AppImage
+
+*.AppDir/

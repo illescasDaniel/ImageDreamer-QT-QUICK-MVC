@@ -34,16 +34,16 @@ ApplicationWindow {
 				TapHandler {
 					acceptedButtons: Qt.RightButton
 					onTapped: (qEventPoint) => {
-						contextMenu.x = qEventPoint.scenePosition.x
-						contextMenu.y = qEventPoint.scenePosition.y
-						contextMenu.visible = true
+						inputTextContextMenu.x = qEventPoint.scenePosition.x
+						inputTextContextMenu.y = qEventPoint.scenePosition.y
+						inputTextContextMenu.visible = true
 					}
 				}
 			}
 		}
 
 		Menu {
-			id: contextMenu
+			id: inputTextContextMenu
 			MenuItem {
 				text: "Cut"
 				onTriggered: inputText.cut()
@@ -116,17 +116,49 @@ ApplicationWindow {
 			verticalAlignment: Image.AlignBottom
 			smooth: true
 			visible: false
-
-			MouseArea {
-				anchors.fill: parent
+			ToolTip.visible: hoverHandler.hovered
+			ToolTip.text: "Left click to open image. Right click for additional options."
+			ToolTip.delay: 300
+			ToolTip.timeout: 6000
+			HoverHandler {
+				id: hoverHandler
+				acceptedDevices: PointerDevice.AllDevices
 				cursorShape: Qt.PointingHandCursor
-				onClicked: {
+			}
+			TapHandler {
+				acceptedButtons: Qt.LeftButton
+				onTapped: (qEventPoint) => {
 					const imagePath = outputImageView.source
 					if (imagePath) {
 						Qt.openUrlExternally(imagePath)
 					}
 				}
 			}
+			TapHandler {
+				acceptedButtons: Qt.RightButton
+				onTapped: (qEventPoint) => {
+					imageContextMenu.x = qEventPoint.scenePosition.x
+					imageContextMenu.y = qEventPoint.scenePosition.y
+					imageContextMenu.visible = true
+				}
+			}
+		}
+	}
+
+	Menu {
+		id: imageContextMenu
+		MenuItem {
+			text: "Copy"
+			onTriggered: {
+				const imagePath = outputImageView.source
+				if (imagePath) {
+					textToImageController.copy_image_to_clipboard(imagePath)
+				}
+			}
+		}
+		MenuItem {
+			text: "Open Pictures folder"
+			onTriggered: Qt.openUrlExternally(textToImageController.pictures_path())
 		}
 	}
 

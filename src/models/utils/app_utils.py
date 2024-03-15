@@ -3,6 +3,7 @@ import logging
 import argparse
 from pathlib import Path
 from appdirs import user_data_dir
+from urllib.parse import urlparse
 
 from models.utils.stream_to_logger import StreamToLogger
 
@@ -16,13 +17,22 @@ class AppUtils:
 			return True
 		else:
 			return False
-	
+
 	@staticmethod
 	def pictures_common_path() -> Path:
 		pictures_dir = AppUtils.__writable_common_path() / 'Pictures'
 		pictures_dir.mkdir(parents=True, exist_ok=True)
 		return pictures_dir
-	
+
+	@staticmethod
+	def uri_to_path(uri: str):
+		parsed_uri = urlparse(uri)
+		if parsed_uri.scheme == 'file':
+			path = Path(parsed_uri.path)
+			return str(path)
+		else:
+			raise ValueError("Invalid file URI")
+
 	@staticmethod
 	def set_up_frozen_app_logging():
 		log_dir = AppUtils.__writable_common_path() / 'logs'
