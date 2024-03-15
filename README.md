@@ -1,8 +1,8 @@
 # ImageDreamer-QT-QUICK-MVC
 
-![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)
-![Hugging Face](https://img.shields.io/badge/Hugging%20Face-%23FFD43B.svg?style=for-the-badge&logo=HuggingFace&logoColor=black)
-![Stable Diffusion](https://img.shields.io/badge/Stable%20Diffusion%20XL%20Turbo-078B75.svg?style=for-the-badge)
+[![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)](https://pytorch.org/)
+[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-%23FFD43B.svg?style=for-the-badge&logo=HuggingFace&logoColor=black)](https://huggingface.co/)
+[![Stable Diffusion](https://img.shields.io/badge/Stable%20Diffusion%20XL%20Turbo-078B75.svg?style=for-the-badge)](https://huggingface.co/Lykon/dreamshaper-xl-v2-turbo)
 ![Qt](https://img.shields.io/badge/Qt-%2341CD52.svg?style=for-the-badge&logo=Qt&logoColor=white)
 
 ![Windows](https://img.shields.io/badge/Windows-%230078D6.svg?style=for-the-badge&logo=windows&logoColor=white)
