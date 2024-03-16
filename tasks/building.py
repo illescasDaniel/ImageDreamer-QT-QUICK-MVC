@@ -8,9 +8,9 @@ from .common import app_name
 
 
 @task(help={
-	'show_terminal': 'Show terminal window (True by default, although it might be safe to use False)',
+	'show_terminal': 'Show terminal window (False by default, if you have any issue just enable it)',
 })
-def build(ctx: Context, show_terminal: bool = True):
+def build(ctx: Context, show_terminal: bool = False):
 	'''
 	Build the application using PyInstaller, please remove build, dist and ImageDreamer.spec files if got any error.
 	After running the command successfully, run the executable with `invoke run-executable`.

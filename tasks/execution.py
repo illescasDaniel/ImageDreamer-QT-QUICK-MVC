@@ -27,6 +27,6 @@ def run_executable(ctx: Context, log_level: Optional[str] = None):
 	ctx.run(execute_command)
 
 @task
-def run_app_image(ctx: Context):
-	execute_command = f'./{app_name}-x86_64.AppImage'
+def run_appimage(ctx: Context):
+	execute_command = f'./dist/{app_name}-x86_64.AppImage'
 	ctx.run(execute_command)
