@@ -6,7 +6,7 @@ Please review the licensing terms of all dependencies and models:
 
 - [MIT License](https://opensource.org/licenses/MIT) for this software
 - [LICENSE-SDXL-Turbo](https://raw.githubusercontent.com/Stability-AI/generative-models/main/model_licenses/LICENSE-SDXL-Turbo) for the DreamShaperXL v2 model
-- Qt and PySide6 are licensed under the GNU LGPL version 3.
+- Qt and PySide6 are licensed under the [GNU LGPL version 3](https://github.com/qtproject/pyside-pyside-setup/blob/dev/LICENSES/LGPL-3.0-only.txt). Package link for more info: https://pypi.org/project/PySide6/
 
 For detailed licensing information, visit [Qt Licensing](https://www.qt.io/licensing/).
 
