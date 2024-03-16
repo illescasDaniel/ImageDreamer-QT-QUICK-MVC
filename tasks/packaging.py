@@ -5,10 +5,11 @@ from pathlib import Path
 from invoke.tasks import task
 from invoke.context import Context
 
+from .building import build
 from .common import cleanup_compressed_files, app_name, app_version
 
 
-@task
+@task(pre=[build])
 def create_appimage(ctx: Context):
 	'''
 	Creates an AppImage, make sure to download AppImageKit from: https://github.com/AppImage/AppImageKit/releases
@@ -56,7 +57,7 @@ def create_appimage(ctx: Context):
 	# success message
 	print(f'AppImage for {app_name} has been created.')
 
-@task
+@task(pre=[build])
 def create_tar_ball(ctx: Context):
 	'''
 	Compress program and its folders.
@@ -65,7 +66,7 @@ def create_tar_ball(ctx: Context):
 	cleanup_compressed_files()
 	ctx.run(f'tar -czvf "{output_file_path}" dist/{app_name}/')
 
-@task
+@task(pre=[build])
 def create_7zip(ctx: Context):
 	'''
 	Compress program and its folders. You need p7zip-full.
@@ -73,3 +74,11 @@ def create_7zip(ctx: Context):
 	output_file_path = f'dist/{app_name}/image_dreamer_no_model.7z'
 	cleanup_compressed_files()
 	ctx.run(f'7z a -t7z -m0=lzma2 -mx=9 -ms=on {output_file_path} dist/{app_name}/')
+
+@task(pre=[build])
+def create_mac_dmg(ctx: Context):
+	'''
+	Compresses the .app folder inside dist (generated using inv build) into a dmg.
+	'''
+	app_to_dmg = f'hdiutil create -volname "{app_name}" -srcfolder dist/{app_name}.app -ov -format UDZO -imagekey zlib-level=9 dist/{app_name}.dmg'
+	ctx.run(app_to_dmg)

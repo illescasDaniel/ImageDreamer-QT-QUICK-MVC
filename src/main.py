@@ -6,6 +6,7 @@ from pathlib import Path
 from PySide6.QtGui import QGuiApplication, QIcon
 from PySide6.QtQml import QQmlApplicationEngine
 from PySide6.QtQuickControls2 import QQuickStyle
+from PySide6.QtCore import QSharedMemory
 
 from models.utils.app_utils import AppUtils
 from models.utils.global_store import GlobalStore
@@ -21,6 +22,11 @@ if __name__ == "__main__":
 		app_path = Path(__file__).resolve().parent
 		GlobalStore.app_base_path = app_path
 		AppUtils.set_up_logging(logging_level=logging.DEBUG)
+
+	shared = QSharedMemory("57794896-6574-42e2-b416-386ec659006f")
+	if not shared.create(512, QSharedMemory.ReadWrite):
+		logging.warning("Can't start more than one instance of the application.")
+		sys.exit(0)
 
 	app = QGuiApplication(sys.argv)
 	app_icon_path = str(GlobalStore.app_base_path / 'assets' / 'app_icon.png')
