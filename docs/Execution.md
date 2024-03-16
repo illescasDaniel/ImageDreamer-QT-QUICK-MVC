@@ -13,13 +13,13 @@ Logs and generated images are saved in platform-specific locations:
 
 ### Logs
 
-- Windows: `C:\Users\<User>\AppData\Local\Daniel Illescas Romero\ImageDreamer\logs`
+- Windows: `C:\Users\<User>\AppData\Local\ImageDreamer\logs`
 - macOS: `/Users/<User>/Library/Application Support/ImageDreamer/logs`
 - Linux: `/home/<User>/.local/share/ImageDreamer/logs`
 
 ### Images
 
-- Windows: `C:\Users\<User>\AppData\Local\Daniel Illescas Romero\ImageDreamer\Pictures`
+- Windows: `C:\Users\<User>\AppData\Local\ImageDreamer\Pictures`
 - macOS: `/Users/<User>/Library/Application Support/ImageDreamer/Pictures`
 - Linux: `/home/<User>/.local/share/ImageDreamer/Pictures`
 

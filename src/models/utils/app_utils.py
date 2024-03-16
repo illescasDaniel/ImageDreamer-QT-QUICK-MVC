@@ -81,7 +81,6 @@ class AppUtils:
 	@staticmethod
 	def __writable_common_path() -> Path:
 		appname = 'ImageDreamer'
-		appauthor = 'Daniel Illescas Romero'
-		common_path = Path(user_data_dir(appname, appauthor))
+		common_path = Path(user_data_dir(appname=appname, appauthor=False))
 		common_path.mkdir(parents=True, exist_ok=True)
 		return common_path

@@ -52,6 +52,7 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
-Type: filesandordirs; Name: "{localappdata}\ImageDreamer"
+Type: filesandordirs; Name: "{localappdata}\ImageDreamer\cache"
+Type: filesandordirs; Name: "{localappdata}\ImageDreamer\logs"
 
 
