@@ -24,7 +24,7 @@ if __name__ == "__main__":
 		AppUtils.set_up_logging(logging_level=logging.DEBUG)
 
 	shared = QSharedMemory("57794896-6574-42e2-b416-386ec659006f")
-	if not shared.create(512, QSharedMemory.ReadWrite):
+	if not shared.create(1):
 		logging.warning("Can't start more than one instance of the application.")
 		sys.exit(0)
 

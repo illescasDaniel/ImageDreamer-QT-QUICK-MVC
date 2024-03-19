@@ -6,10 +6,10 @@ import QtQuick.Dialogs
 ApplicationWindow {
 	id: window
 	visible: true
-	width: 390
-	height: 540
-	minimumWidth: 390
-	minimumHeight: 540
+	width: 480
+	height: 640
+	minimumWidth: 480
+	minimumHeight: 640
 	title: "Image Dreamer"
 
 	ColumnLayout {
@@ -23,6 +23,7 @@ ApplicationWindow {
 				id: inputText
 				wrapMode: TextEdit.Wrap
 				placeholderText: "Describe an image..."
+				font.pointSize: 12
 
 				Keys.onPressed: function (event) {
 					if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
@@ -64,8 +65,11 @@ ApplicationWindow {
 
 		Button {
 			Layout.alignment: Qt.AlignHCenter
+			Layout.minimumWidth: 150
+			Layout.minimumHeight: 35
 			id: generateImageButton
 			text: "Generate"
+			font.pointSize: 12
 			onClicked: textToImageController.generate(inputText.text)
 		}
 
@@ -92,13 +96,13 @@ ApplicationWindow {
 				Text {
 					Layout.fillWidth: true
 					text: "Developed by **Daniel Illescas Romero**"
-					font.pointSize: 8
+					font.pointSize: 10
 					textFormat: Text.MarkdownText
 				}
 				Text {
 					Layout.fillWidth: true
 					text: "Code available at [GitHub](https://github.com/illescasDaniel/ImageDreamer-QT-QUICK-MVC)"
-					font.pointSize: 8
+					font.pointSize: 10
 					textFormat: Text.MarkdownText
 					onLinkActivated: (link) => Qt.openUrlExternally(link)
 				}
